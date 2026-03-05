@@ -31,6 +31,48 @@ html.dark {
   --muted: var(--muted-dark);
 }
 
+/* Стили footer, использующие переменные темы */
+.site-footer {
+  background: var(--bg); /* совпадает с фоном страницы */
+  border-top: 1px solid rgba(255,255,255,0.04); /* тонкая разделяющая линия в dark */
+  margin-top: 3rem;
+  /* если хочешь, чтобы footer немного отличался, используй --card-bg:
+     background: var(--card-bg); */
+}
+
+html.light .site-footer {
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+
+/* контейнер согласованный с основной шириной */
+.site-footer .container {
+  max-width: 64rem; /* ~7xl — если хочешь 5xl используй 56rem; ниже пример под 5xl */
+  margin: 0 auto;
+  padding: 1.25rem; /* px-4 py-6 */
+  text-align: center;
+}
+
+/* если у тебя на странице основной контейнер max-w-5xl, поставь 56rem (5xl) */
+@media (max-width: 1024px) {
+  .site-footer .container { padding-left: 1rem; padding-right: 1rem; }
+}
+
+/* тексты */
+.footer-text {
+  color: var(--muted);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.footer-link {
+  color: var(--roblox-blue);
+  font-weight: 600;
+  text-decoration: none;
+}
+.footer-link:hover { text-decoration: underline; }
+
+
+
 /* base */
 html, body {
   height: 100%;
