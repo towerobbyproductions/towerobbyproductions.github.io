@@ -60,8 +60,8 @@ function applyTranslations() {
   });
 
   // Update dynamic buttons
-  el.langToggle.textContent = currentLang.toUpperCase();
-  el.viewOnRoblox.textContent = I18N[currentLang].view_roblox;
+  if (el.langToggle) el.langToggle.textContent = currentLang.toUpperCase();
+  if (el.viewOnRoblox) el.viewOnRoblox.textContent = I18N[currentLang].view_roblox;
   // "By" label before owner link
   const bySpan = document.querySelector('[data-i18n="by"]');
   if (bySpan) bySpan.textContent = I18N[currentLang].by;
@@ -73,24 +73,31 @@ function getCurrentTheme() {
   return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 }
 function applyThemeButton() {
-  el.themeToggle.textContent = getCurrentTheme() === 'dark' ? '🌙' : '☀️';
+  if (!el.themeToggle) return;
+  const theme = getCurrentTheme();
+  el.themeToggle.textContent = theme === 'dark' ? '🌙' : '☀️';
+  el.themeToggle.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
 }
-el.themeToggle.addEventListener('click', () => {
-  const now = getCurrentTheme() === 'dark' ? 'light' : 'dark';
-  if (now === 'dark') document.documentElement.classList.add('dark');
-  else document.documentElement.classList.remove('dark');
-  localStorage.setItem('theme', now);
-  applyThemeButton();
-});
+if (el.themeToggle) {
+  el.themeToggle.addEventListener('click', () => {
+    const now = getCurrentTheme() === 'dark' ? 'light' : 'dark';
+    if (now === 'dark') document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
+    localStorage.setItem('theme', now);
+    applyThemeButton();
+  });
+}
 applyThemeButton();
 
 // Language toggle button
-el.langToggle.addEventListener('click', () => {
-  currentLang = currentLang === 'en' ? 'ru' : 'en';
-  localStorage.setItem('siteLang', currentLang);
-  document.documentElement.lang = currentLang;
-  applyTranslations();
-});
+if (el.langToggle) {
+  el.langToggle.addEventListener('click', () => {
+    currentLang = currentLang === 'en' ? 'ru' : 'en';
+    localStorage.setItem('siteLang', currentLang);
+    document.documentElement.lang = currentLang;
+    applyTranslations();
+  });
+}
 
 // Utilities
 function fmt(n){ return new Intl.NumberFormat().format(n); }
@@ -141,15 +148,12 @@ fetch(gamesApi)
     info.className = 'exp-info';
 
     const title = document.createElement('div');
-    // ensure title inherits color (so dark theme works)
     title.className = 'exp-title';
-    // If price field exists on g, show price in bracket (Robux). Fallback: empty.
     const priceStr = (g.price && g.price > 0) ? ` [${g.price} Robux]` : (g.price === 0 ? ' [Free]' : '');
     title.textContent = (g.name || 'HD Admin Chaos Tower') + priceStr;
 
     const meta = document.createElement('div');
     meta.className = 'exp-meta mt-1';
-    // build meta text with language-aware suffixes
     const activeText = `${fmt(playing)} ${I18N[currentLang].active_suffix}`;
     const visitsText = `${fmt(visits)} ${I18N[currentLang].visits_suffix}`;
 
@@ -177,7 +181,7 @@ fetch(gamesApi)
     el.about.textContent = 'Unable to load game info.';
     el.experiencesCount.textContent = '0';
     const fallback = document.createElement('div');
-    fallback.className = 'p-4 text-sm text-gray-500';
+    fallback.className = 'p-4 text-sm text-gray-500 dark:text-gray-400';
     fallback.textContent = 'Failed to load experiences.';
     el.experiencesGrid.appendChild(fallback);
   });
@@ -188,7 +192,6 @@ fetch(gamesApi)
     const res = await fetch(`https://groups.roproxy.com/v1/groups/${GROUP_ID}`);
     if (!res.ok) throw new Error('group fetch failed');
     const data = await res.json();
-    // try common fields
     const members = data.memberCount || data.membersCount || (data.data && data.data.memberCount);
     const about = data.description || data.about;
     if (members) el.members.textContent = `${fmt(members)} ${I18N[currentLang].members_suffix}`;
