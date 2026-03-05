@@ -310,6 +310,8 @@ function formatDate(dateString) {
     }
 }
 
+document.getElementById("year").textContent = new Date().getFullYear();
+
 // ========== EVENTS ==========
 function setupEventListeners() {
     const themeToggle = document.getElementById('themeToggle');
@@ -320,4 +322,5 @@ function setupEventListeners() {
 }
 
 // Экспортируем функции для глобального доступа (для onclick в HTML)
+
 window.changeSlide = changeSlide;
