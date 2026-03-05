@@ -84,11 +84,13 @@ body {
 .slider-button.next { right: 12px; }
 .slider-button:hover { background: rgba(0,0,0,0.6); }
 
-/* Owner line */
+/* Owner line — цвет теперь наследуется из текущей темы */
 .owner-line {
     font-size: 0.95rem;
-    color: rgba(0,0,0,0.7);
+    color: inherit; /* или color: currentColor; — оба работают */
 }
+
+/* Ссылка владельца остаётся синей и заметной в обеих темах */
 .owner-line a {
     color: #00A2FF;
     font-weight: 600;
