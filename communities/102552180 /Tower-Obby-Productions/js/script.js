@@ -1,12 +1,10 @@
-// JS: подтягиваем реальные данные через roproxy и рендерим карточки
-// Поместите в js/script.js (заменяет предыдущую версию)
-
+// config
 const UNIVERSE_ID = '9678437015';
 const GROUP_ID = '102552180';
 const ROOT_PLACE_ID = '71240146627158';
-
 const gamesApi = `https://games.roproxy.com/v1/games?universeIds=${UNIVERSE_ID}`;
 
+// elements
 const el = {
   about: document.getElementById('communityAbout'),
   members: document.getElementById('membersCount'),
@@ -20,78 +18,60 @@ const el = {
   viewOnRoblox: document.getElementById('viewOnRoblox')
 };
 
-// Language dictionary (extend as needed)
+// I18N (same as before)
 const I18N = {
-  en: {
-    by: 'By',
-    view_roblox: 'View Community in Roblox',
-    about: 'About',
-    experiences: 'Experiences',
-    members_suffix: 'Members',
-    loading_about: 'Loading about…',
-    experience_singular: '1 Experience',
-    experience_plural: (n) => `${n} Experiences`,
-    active_suffix: 'active',
-    visits_suffix: 'visits'
-  },
-  ru: {
-    by: 'Автор',
-    view_roblox: 'Открыть сообщество в Roblox',
-    about: 'О нас',
-    experiences: 'Игры',
-    members_suffix: 'участников',
-    loading_about: 'Загрузка описания…',
-    experience_singular: '1 игра',
-    experience_plural: (n) => `${n} игр`,
-    active_suffix: 'активных',
-    visits_suffix: 'посещений'
-  }
+  en: { by:'By', view_roblox:'View Community in Roblox', about:'About', experiences:'Experiences', members_suffix:'Members', loading_about:'Loading about…', experience_singular:'1 Experience', active_suffix:'active', visits_suffix:'visits' },
+  ru: { by:'Автор', view_roblox:'Открыть сообщество в Roblox', about:'О нас', experiences:'Игры', members_suffix:'участников', loading_about:'Загрузка описания…', experience_singular:'1 игра', active_suffix:'активных', visits_suffix:'посещений' }
 };
 
 let currentLang = localStorage.getItem('siteLang') || window.__SITE_LANG || 'en';
 
-// Apply static translations
-function applyTranslations() {
-  document.querySelectorAll('[data-i18n]').forEach(elm => {
+// apply translations
+function applyTranslations(){
+  document.querySelectorAll('[data-i18n]').forEach(elm=>{
     const key = elm.getAttribute('data-i18n');
-    if (I18N[currentLang] && I18N[currentLang][key]) {
-      elm.textContent = I18N[currentLang][key];
-    }
+    if (I18N[currentLang] && I18N[currentLang][key]) elm.textContent = I18N[currentLang][key];
   });
-
-  // Update dynamic buttons
   if (el.langToggle) el.langToggle.textContent = currentLang.toUpperCase();
   if (el.viewOnRoblox) el.viewOnRoblox.textContent = I18N[currentLang].view_roblox;
-  // "By" label before owner link
-  const bySpan = document.querySelector('[data-i18n="by"]');
-  if (bySpan) bySpan.textContent = I18N[currentLang].by;
 }
 applyTranslations();
 
-// Theme toggle logic (persist)
-function getCurrentTheme() {
-  return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+// Theme utilities: ensure exactly one of html.dark / html.light
+function getTheme(){
+  return document.documentElement.classList.contains('light') ? 'light' : 'dark';
 }
-function applyThemeButton() {
+function setTheme(t){ 
+  if (t === 'light') { document.documentElement.classList.add('light'); document.documentElement.classList.remove('dark'); }
+  else { document.documentElement.classList.add('dark'); document.documentElement.classList.remove('light'); }
+  localStorage.setItem('theme', t);
+  updateThemeButton();
+}
+function updateThemeButton(){
   if (!el.themeToggle) return;
-  const theme = getCurrentTheme();
-  el.themeToggle.textContent = theme === 'dark' ? '🌙' : '☀️';
-  el.themeToggle.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+  const cur = getTheme();
+  el.themeToggle.textContent = cur === 'dark' ? '🌙' : '☀️';
+  el.themeToggle.setAttribute('aria-pressed', cur === 'dark' ? 'true' : 'false');
 }
-if (el.themeToggle) {
-  el.themeToggle.addEventListener('click', () => {
-    const now = getCurrentTheme() === 'dark' ? 'light' : 'dark';
-    if (now === 'dark') document.documentElement.classList.add('dark');
-    else document.documentElement.classList.remove('dark');
-    localStorage.setItem('theme', now);
-    applyThemeButton();
+
+// initialize theme (if script inlined already set class, keep it; but normalize)
+(function initTheme(){
+  const stored = localStorage.getItem('theme');
+  const theme = stored || (document.documentElement.classList.contains('light') ? 'light' : 'dark');
+  setTheme(theme);
+})();
+
+// hook theme toggle
+if (el.themeToggle){
+  el.themeToggle.addEventListener('click', ()=>{
+    const now = getTheme() === 'dark' ? 'light' : 'dark';
+    setTheme(now);
   });
 }
-applyThemeButton();
 
-// Language toggle button
-if (el.langToggle) {
-  el.langToggle.addEventListener('click', () => {
+// language toggle
+if (el.langToggle){
+  el.langToggle.addEventListener('click', ()=>{
     currentLang = currentLang === 'en' ? 'ru' : 'en';
     localStorage.setItem('siteLang', currentLang);
     document.documentElement.lang = currentLang;
@@ -99,33 +79,28 @@ if (el.langToggle) {
   });
 }
 
-// Utilities
+// helpers
 function fmt(n){ return new Intl.NumberFormat().format(n); }
 
-// Fill placeholders
+// placeholders
 el.about.textContent = I18N[currentLang].loading_about;
 el.members.textContent = 'Loading…';
 
-// Fetch game data and render
+// fetch games data
 fetch(gamesApi)
-  .then(r => r.ok ? r.json() : Promise.reject(r))
-  .then(json => {
+  .then(r=>r.ok? r.json() : Promise.reject(r))
+  .then(json=>{
     if (!json.data || !json.data.length) throw new Error('No game data');
     const g = json.data[0];
 
-    // Use provided values or fallbacks
     el.communityName.textContent = 'Tower Obby Productions';
     el.communityAvatar.src = 'https://tr.rbxcdn.com/180DAY-a96d76930a4b8fd8835dfb3715d21838/150/150/Image/Webp/noFilter';
 
-    // About text (prefer group/creator description if present)
-    const aboutText = g.sourceDescription || g.description || 'No description provided.';
-    el.about.textContent = aboutText;
+    el.about.textContent = g.sourceDescription || g.description || 'No description provided.';
 
-    // Build experience card
     const fav = g.favoritedCount || 0;
     const visits = g.visits || 0;
     const playing = g.playing || 0;
-
     let ratingPercent = 0;
     if (visits > 0) {
       ratingPercent = Math.round((fav / (visits / 1000)) * 100);
@@ -133,6 +108,7 @@ fetch(gamesApi)
       if (ratingPercent > 99) ratingPercent = 99;
     }
 
+    // create card
     const card = document.createElement('a');
     card.className = 'exp-card';
     card.href = `https://www.roblox.com/games/${ROOT_PLACE_ID}/`;
@@ -144,49 +120,41 @@ fetch(gamesApi)
     thumb.alt = g.name || 'Experience';
     thumb.className = 'exp-thumb';
 
-    const info = document.createElement('div');
-    info.className = 'exp-info';
+    const info = document.createElement('div'); info.className = 'exp-info';
 
-    const title = document.createElement('div');
-    title.className = 'exp-title';
+    const title = document.createElement('div'); title.className = 'exp-title';
     const priceStr = (g.price && g.price > 0) ? ` [${g.price} Robux]` : (g.price === 0 ? ' [Free]' : '');
     title.textContent = (g.name || 'HD Admin Chaos Tower') + priceStr;
 
-    const meta = document.createElement('div');
-    meta.className = 'exp-meta mt-1';
+    const meta = document.createElement('div'); meta.className = 'exp-meta mt-1';
     const activeText = `${fmt(playing)} ${I18N[currentLang].active_suffix}`;
     const visitsText = `${fmt(visits)} ${I18N[currentLang].visits_suffix}`;
 
-    meta.innerHTML =
-      `<div class="flex items-center gap-2">
-          <span class="exp-rating">${ratingPercent}%</span>
-          <span>${activeText}</span>
-          <span>•</span>
-          <span>${visitsText}</span>
-       </div>
-       <div class="mt-1 text-sm text-gray-500 dark:text-gray-400">${g.genre_l1 || g.genre || ''} · ${g.genre_l2 || ''}</div>`;
+    meta.innerHTML = `<div class="flex items-center gap-2">
+                        <span class="exp-rating">${ratingPercent}%</span>
+                        <span>${activeText}</span>
+                        <span>•</span>
+                        <span>${visitsText}</span>
+                      </div>
+                      <div class="mt-1 text-sm">${g.genre_l1 || g.genre || ''} · ${g.genre_l2 || ''}</div>`;
 
-    info.appendChild(title);
-    info.appendChild(meta);
-
-    card.appendChild(thumb);
-    card.appendChild(info);
-
+    info.appendChild(title); info.appendChild(meta);
+    card.appendChild(thumb); card.appendChild(info);
     el.experiencesGrid.appendChild(card);
-    el.experiencesCount.textContent = I18N[currentLang].experience_singular;
 
+    el.experiencesCount.textContent = I18N[currentLang].experience_singular;
   })
-  .catch(err => {
-    console.error('Error loading game data', err);
+  .catch(err=>{
+    console.error(err);
     el.about.textContent = 'Unable to load game info.';
     el.experiencesCount.textContent = '0';
     const fallback = document.createElement('div');
-    fallback.className = 'p-4 text-sm text-gray-500 dark:text-gray-400';
+    fallback.className = 'p-4 text-sm';
     fallback.textContent = 'Failed to load experiences.';
     el.experiencesGrid.appendChild(fallback);
   });
 
-// Try to fetch group data (best-effort); fallback to known "65K+ Members" if unavailable
+// fetch group info (best-effort)
 (async function fetchGroup(){
   try {
     const res = await fetch(`https://groups.roproxy.com/v1/groups/${GROUP_ID}`);
@@ -196,9 +164,8 @@ fetch(gamesApi)
     const about = data.description || data.about;
     if (members) el.members.textContent = `${fmt(members)} ${I18N[currentLang].members_suffix}`;
     else el.members.textContent = '65K+ ' + I18N[currentLang].members_suffix;
-
     if (about && el.about.textContent.includes('Loading')) el.about.textContent = about;
-  } catch(e) {
+  } catch(e){
     el.members.textContent = '65K+ ' + I18N[currentLang].members_suffix;
   }
 })();
