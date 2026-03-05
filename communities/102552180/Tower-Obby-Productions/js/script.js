@@ -154,6 +154,8 @@ fetch(gamesApi)
     el.experiencesGrid.appendChild(fallback);
   });
 
+document.getElementById("year").textContent = new Date().getFullYear();
+
 // fetch group info (best-effort)
 (async function fetchGroup(){
   try {
