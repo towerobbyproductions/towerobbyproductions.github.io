@@ -16,17 +16,6 @@ body {
     margin: 0 auto;
 }
 
-/* Стили для карточек */
-.stat-card {
-    transition: all 0.3s ease;
-    animation: fadeInUp 0.5s ease-out;
-}
-
-.stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
 /* Анимации */
 @keyframes fadeInUp {
     from {
@@ -48,64 +37,32 @@ body {
     }
 }
 
-/* Loading state for cards */
+/* Loading state */
 .loading {
     opacity: 0.6;
     animation: pulse 1.5s ease-in-out infinite;
 }
 
-/* Слайдер */
-.slider-container {
+.loading-row td {
     position: relative;
-    overflow: hidden;
-    border-radius: 12px;
-    min-height: 16rem;
-    background: #f0f0f0;
+    color: transparent !important;
 }
 
-.dark .slider-container {
-    background: #2a2a2a;
-}
-
-.slider-wrapper {
-    display: flex;
-    transition: transform 0.5s ease;
-    width: 100%;
-}
-
-.slider-image {
-    min-width: 100%;
+.loading-row td::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    display: block;
-    aspect-ratio: 16/9;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    animation: loading 1.5s infinite;
 }
 
-/* Кнопки слайдера */
-.slider-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.35);
-    color: white;
-    border: none;
-    width: 38px;
-    height: 56px;
-    border-radius: 8px;
-    font-size: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    transition: background 0.2s;
-    backdrop-filter: blur(4px);
+@keyframes loading {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
 }
-
-.slider-button.prev { left: 12px; }
-.slider-button.next { right: 12px; }
-.slider-button:hover { background: rgba(0,0,0,0.6); }
 
 /* Owner line */
 .owner-line {
@@ -113,7 +70,7 @@ body {
     color: #111;
 }
 
-.dark .owner-line {
+html.dark .owner-line {
     color: #ffffff;
 }
 
@@ -127,22 +84,8 @@ body {
     text-decoration: underline; 
 }
 
-/* Maturity badge */
-.maturity-badge {
-    display: inline-block;
-    padding: 6px 10px;
-    border-radius: 999px;
-    background: rgba(0,0,0,0.06);
-    font-weight: 600;
-    color: inherit;
-}
-
-.dark .maturity-badge {
-    background: rgba(255,255,255,0.06);
-}
-
-/* Leaderboard Tabs */
-.leaderboard-tab {
+/* Category Tabs */
+.category-tab {
     background: #f3f4f6;
     color: #4b5563;
     border: none;
@@ -150,41 +93,42 @@ body {
     transition: all 0.3s;
 }
 
-.dark .leaderboard-tab {
+html.dark .category-tab {
     background: #374151;
     color: #9ca3af;
 }
 
-.leaderboard-tab:hover {
+.category-tab:hover {
     background: #e5e7eb;
     color: #1f2937;
 }
 
-.dark .leaderboard-tab:hover {
+html.dark .category-tab:hover {
     background: #4b5563;
     color: #f3f4f6;
 }
 
-.leaderboard-tab.active {
+.category-tab.active {
     background: #00A2FF;
     color: white;
 }
 
-.dark .leaderboard-tab.active {
+html.dark .category-tab.active {
     background: #00A2FF;
     color: white;
 }
 
-.leaderboard-content {
+/* Leaderboard visibility */
+.leaderboard {
     display: none;
-}
-
-.leaderboard-content.active {
-    display: block;
     animation: fadeInUp 0.5s ease-out;
 }
 
-/* Стили для таблицы */
+.leaderboard.active {
+    display: block;
+}
+
+/* Table styles */
 table {
     border-collapse: separate;
     border-spacing: 0;
@@ -195,12 +139,13 @@ thead tr {
     background-color: #f9fafb;
 }
 
-.dark thead tr {
+html.dark thead tr {
     background-color: #1f2937;
 }
 
 tbody tr {
     transition: background-color 0.2s;
+    animation: fadeInUp 0.3s ease-out;
 }
 
 tbody tr:hover {
@@ -208,31 +153,40 @@ tbody tr:hover {
 }
 
 td, th {
-    padding: 12px 16px;
+    padding: 16px 20px;
 }
 
-tbody tr td:first-child {
+td:first-child {
     font-weight: 600;
-    color: #00A2FF;
+    width: 80px;
 }
 
 /* Rank medals */
-tbody tr:nth-child(1) td:first-child { color: gold; }
-tbody tr:nth-child(2) td:first-child { color: silver; }
-tbody tr:nth-child(3) td:first-child { color: #cd7f32; }
+tbody tr:nth-child(1) td:first-child { 
+    color: #FFD700;
+    font-size: 1.2em;
+}
+tbody tr:nth-child(2) td:first-child { 
+    color: #C0C0C0;
+    font-size: 1.1em;
+}
+tbody tr:nth-child(3) td:first-child { 
+    color: #CD7F32;
+}
 
-/* Player row styling */
-.player-row {
+/* Player cell */
+.player-cell {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
 .player-avatar {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     object-fit: cover;
+    border: 2px solid #00A2FF;
 }
 
 .player-name {
@@ -246,13 +200,27 @@ tbody tr:nth-child(3) td:first-child { color: #cd7f32; }
 
 .player-name a:hover {
     color: #00A2FF;
-    text-decoration: underline;
 }
 
-/* Value styling */
+/* Value formatting */
+.value-slaps {
+    font-weight: 600;
+    color: #3B82F6;
+}
+
 .value-slaps::after {
     content: ' 👏';
     opacity: 0.7;
+}
+
+.value-time {
+    font-weight: 600;
+    color: #10B981;
+}
+
+.value-robux {
+    font-weight: 600;
+    color: #8B5CF6;
 }
 
 .value-robux::after {
@@ -260,68 +228,100 @@ tbody tr:nth-child(3) td:first-child { color: #cd7f32; }
     opacity: 0.7;
 }
 
-/* Loading animation for table rows */
-.loading-row {
-    opacity: 0.6;
-    animation: pulse 1.5s ease-in-out infinite;
-}
-
 /* Refresh timer */
 .refresh-timer {
-    font-size: 0.875rem;
-    color: #6b7280;
-    transition: color 0.3s;
+    font-family: monospace;
+    padding: 4px 8px;
+    background: rgba(0,0,0,0.05);
+    border-radius: 4px;
 }
 
-.dark .refresh-timer {
+html.dark .refresh-timer {
+    background: rgba(255,255,255,0.05);
+}
+
+/* Error state */
+.error-message {
+    text-align: center;
+    padding: 40px !important;
+    color: #ef4444;
+}
+
+.error-message i {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.retry-btn {
+    background: #00A2FF;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    margin-top: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.retry-btn:hover {
+    background: #0088cc;
+}
+
+/* Empty state */
+.empty-message {
+    text-align: center;
+    padding: 40px !important;
     color: #9ca3af;
 }
 
-/* Responsive design */
+/* Responsive */
 @media (max-width: 768px) {
-    .stat-card {
-        padding: 1rem;
-    }
-
-    table {
-        font-size: 0.9rem;
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 
     td, th {
-        padding: 8px 12px;
+        padding: 12px;
+    }
+
+    .player-cell {
+        gap: 8px;
+    }
+
+    .player-avatar {
+        width: 28px;
+        height: 28px;
     }
 
     .owner-line { 
         font-size: 0.9rem; 
     }
 
-    .slider-container {
-        min-height: 12rem;
-    }
-
-    .leaderboard-tab {
+    .category-tab {
         padding: 0.75rem 1rem;
         font-size: 0.875rem;
     }
 }
 
-@media (max-width: 640px) {
-    .container {
-        padding-left: 1rem;
-        padding-right: 1rem;
+@media (max-width: 480px) {
+    td, th {
+        padding: 8px;
     }
 
-    .player-row {
-        gap: 8px;
+    td:first-child {
+        width: 50px;
     }
 
-    .player-avatar {
-        width: 24px;
-        height: 24px;
+    .player-name {
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
 
-/* Кастомный скроллбар */
+/* Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -332,7 +332,7 @@ tbody tr:nth-child(3) td:first-child { color: #cd7f32; }
     border-radius: 4px;
 }
 
-.dark ::-webkit-scrollbar-track {
+html.dark ::-webkit-scrollbar-track {
     background: #2a2a2a;
 }
 
@@ -345,39 +345,10 @@ tbody tr:nth-child(3) td:first-child { color: #cd7f32; }
     background: #555;
 }
 
-.dark ::-webkit-scrollbar-thumb {
+html.dark ::-webkit-scrollbar-thumb {
     background: #666;
 }
 
-.dark ::-webkit-scrollbar-thumb:hover {
+html.dark ::-webkit-scrollbar-thumb:hover {
     background: #888;
-}
-
-/* Utility classes */
-.highlight {
-    animation: highlight 1s ease-out;
-}
-
-@keyframes highlight {
-    0% {
-        background-color: rgba(0, 162, 255, 0.3);
-    }
-    100% {
-        background-color: transparent;
-    }
-}
-
-/* Play button for mobile */
-@media (max-width: 768px) {
-    .md\\:flex {
-        display: flex;
-    }
-}
-
-/* Gradient text */
-.bg-gradient-to-r {
-    background-size: 100%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
