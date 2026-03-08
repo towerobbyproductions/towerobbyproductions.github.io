@@ -5,50 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- SEO Meta Tags -->
-    <title>Tower Obby Productions - Game Leaderboards</title>
-    <meta name="description" content="Official leaderboards for Tower Obby Productions Roblox game. Track top players by slaps, playtime, and Robux spent.">
-    <meta name="keywords" content="Roblox, Tower Obby, leaderboards, slaps, playtime, Robux, gaming stats">
+    <title>Tower Obby Productions - Leaderboards</title>
+    <meta name="description" content="Official leaderboards for Tower Obby Productions Roblox game. Top players by Slaps, Playtime, and Robux Spent.">
+    <meta name="keywords" content="Roblox, Tower Obby, leaderboards, slaps, playtime, robux, top players">
     <meta name="author" content="Tower Obby Productions">
     
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://towerobbyproductions.github.io/leaderboards/">
-    <meta property="og:title" content="Tower Obby Productions - Game Leaderboards">
-    <meta property="og:description" content="Track top players by slaps, playtime, and Robux spent in Tower Obby Productions">
+    <meta property="og:title" content="Tower Obby Productions - Leaderboards">
+    <meta property="og:description" content="Top players by Slaps, Playtime, and Robux Spent">
     <meta property="og:image" content="https://tr.rbxcdn.com/180DAY-ac99810b043fcc8b90d47a062764b279/768/432/Image/Webp/noFilter">
-    
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Tower Obby Productions - Game Leaderboards">
-    <meta name="twitter:description" content="Track top players by slaps, playtime, and Robux spent">
-    <meta name="twitter:image" content="https://tr.rbxcdn.com/180DAY-ac99810b043fcc8b90d47a062764b279/768/432/Image/Webp/noFilter">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://www.roblox.com/favicon.ico">
     
     <!-- Fonts & CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+<body>
     <!-- Header -->
     <header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50">
         <nav class="container mx-auto px-4 py-4">
             <div class="flex items-center justify-between">
-                <!-- Logo & Title -->
                 <div class="flex items-center space-x-3">
-                    <a href="https://www.roblox.com/games/9678437015/" target="_blank" rel="noopener" class="flex items-center space-x-3">
-                        <img src="https://tr.rbxcdn.com/180DAY-0319103f58ead123c482d498a9ad2494/768/432/Image/Webp/noFilter" 
-                             alt="Tower Obby Logo" 
-                             class="w-10 h-10 rounded-lg object-cover">
-                        <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-                            Tower Obby Productions
-                        </h1>
-                    </a>
+                    <img src="https://tr.rbxcdn.com/180DAY-0319103f58ead123c482d498a9ad2494/768/432/Image/Webp/noFilter" 
+                         alt="Tower Obby Logo" 
+                         class="w-10 h-10 rounded-lg object-cover">
+                    <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+                        Tower Obby Productions
+                    </h1>
                 </div>
                 
-                <!-- Controls -->
                 <div class="flex items-center space-x-2">
                     <button id="themeToggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition" aria-label="Toggle theme">
                         🌙
@@ -56,17 +43,9 @@
                     <button id="langToggle" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition font-medium">
                         RU
                     </button>
-                    <a href="https://www.roblox.com/games/9678437015/" 
-                       target="_blank" 
-                       rel="noopener"
-                       class="hidden md:flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
-                        <i class="fas fa-play"></i>
-                        <span data-lang-en="Play Now" data-lang-ru="Играть">Play Now</span>
-                    </a>
                 </div>
             </div>
             
-            <!-- Owner Line -->
             <div class="owner-line mt-2 text-center">
                 <span data-lang-en="Created by" data-lang-ru="Создано">Created by</span>
                 <a href="https://towerobbyproductions.github.io/communities/102552180/Tower-Obby-Productions/" target="_blank" rel="noopener">
@@ -78,168 +57,109 @@
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
-        <!-- Game Info Section -->
-        <section class="mb-12">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Slider Card -->
-                <div class="md:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-                    <div class="slider-container">
-                        <div class="slider-wrapper" id="sliderWrapper"></div>
-                        <button class="slider-button prev" onclick="changeSlide(-1)" aria-label="Previous slide">‹</button>
-                        <button class="slider-button next" onclick="changeSlide(1)" aria-label="Next slide">›</button>
-                    </div>
-                </div>
-                
-                <!-- Game Stats Card -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-                    <h2 class="text-2xl font-bold mb-4" id="gameTitle">Tower Obby Productions</h2>
-                    <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm" id="gameDescription">Experience the ultimate tower defense and platformer challenge!</p>
-                    
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-600 dark:text-gray-400" data-lang-en="Genre:" data-lang-ru="Жанр:">Genre:</span>
-                            <span class="font-semibold" id="genre">Obby & Platformer</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-600 dark:text-gray-400" data-lang-en="Type:" data-lang-ru="Тип:">Type:</span>
-                            <span class="font-semibold" id="subgenre">Tower Obby</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-600 dark:text-gray-400" data-lang-en="Maturity:" data-lang-ru="Возраст:">Maturity:</span>
-                            <span id="maturity"><span class="maturity-badge">Minimal</span></span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-600 dark:text-gray-400" data-lang-en="Created:" data-lang-ru="Создана:">Created:</span>
-                            <span class="font-semibold" id="created">N/A</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-600 dark:text-gray-400" data-lang-en="Updated:" data-lang-ru="Обновлена:">Updated:</span>
-                            <span class="font-semibold" id="updated">N/A</span>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-6 grid grid-cols-2 gap-4">
-                        <div class="stat-card p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                            <div class="text-sm text-gray-600 dark:text-gray-400" data-lang-en="Online" data-lang-ru="Онлайн">Online</div>
-                            <div class="text-xl font-bold text-blue-600" id="activePlayers">0</div>
-                        </div>
-                        <div class="stat-card p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                            <div class="text-sm text-gray-600 dark:text-gray-400" data-lang-en="Visits" data-lang-ru="Визиты">Visits</div>
-                            <div class="text-xl font-bold text-green-600" id="visits">0</div>
-                        </div>
-                        <div class="stat-card p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                            <div class="text-sm text-gray-600 dark:text-gray-400" data-lang-en="Favorites" data-lang-ru="Избранное">Favorites</div>
-                            <div class="text-xl font-bold text-purple-600" id="favorites">0</div>
-                        </div>
-                        <div class="stat-card p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                            <div class="text-sm text-gray-600 dark:text-gray-400" data-lang-en="Server" data-lang-ru="Сервер">Server</div>
-                            <div class="text-xl font-bold text-orange-600" id="serverSize">38</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Leaderboards Section -->
-        <section class="mb-12">
-            <h2 class="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-                <span data-lang-en="Top Players" data-lang-ru="Лучшие игроки">Top Players</span>
+        <!-- Title -->
+        <div class="text-center mb-12">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+                <span data-lang-en="Leaderboards" data-lang-ru="Таблицы лидеров">Leaderboards</span>
             </h2>
-            
-            <!-- Leaderboard Tabs -->
-            <div class="flex flex-wrap justify-center gap-4 mb-8">
-                <button class="leaderboard-tab active px-6 py-3 rounded-lg font-semibold transition" data-tab="slaps">
-                    <i class="fas fa-hand-pointer mr-2"></i>
-                    <span data-lang-en="Slaps" data-lang-ru="Шлепки">Slaps</span>
-                </button>
-                <button class="leaderboard-tab px-6 py-3 rounded-lg font-semibold transition" data-tab="time">
-                    <i class="fas fa-clock mr-2"></i>
-                    <span data-lang-en="Playtime" data-lang-ru="Время игры">Playtime</span>
-                </button>
-                <button class="leaderboard-tab px-6 py-3 rounded-lg font-semibold transition" data-tab="robux">
-                    <i class="fas fa-dollar-sign mr-2"></i>
-                    <span data-lang-en="Robux Spent" data-lang-ru="Потрачено Robux">Robux Spent</span>
-                </button>
-            </div>
+            <p class="text-gray-600 dark:text-gray-400 text-lg">
+                <span data-lang-en="Top 25 players in each category" data-lang-ru="Топ 25 игроков в каждой категории">Top 25 players in each category</span>
+            </p>
+        </div>
 
-            <!-- Leaderboards Content -->
-            <div class="space-y-8">
-                <!-- Slaps Leaderboard -->
-                <div id="slaps-leaderboard" class="leaderboard-content active">
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-                        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                            <h3 class="text-xl font-semibold flex items-center">
-                                <i class="fas fa-hand-pointer text-blue-600 mr-2"></i>
-                                <span data-lang-en="Slaps Leaderboard" data-lang-ru="Таблица лидеров по шлепкам">Slaps Leaderboard</span>
-                                <span class="ml-auto text-sm text-gray-500" id="slaps-refresh"></span>
-                            </h3>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full" id="slaps-table">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">#</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-lang-en="Player" data-lang-ru="Игрок">Player</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-lang-en="Slaps" data-lang-ru="Шлепки">Slaps</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="slaps-body"></tbody>
-                            </table>
-                        </div>
+        <!-- Category Tabs -->
+        <div class="flex flex-wrap justify-center gap-4 mb-8">
+            <button class="category-tab active px-6 py-3 rounded-lg font-semibold transition" data-category="slaps">
+                <i class="fas fa-hand-pointer mr-2"></i>
+                <span data-lang-en="Slaps" data-lang-ru="Шлепки">Slaps</span>
+            </button>
+            <button class="category-tab px-6 py-3 rounded-lg font-semibold transition" data-category="time">
+                <i class="fas fa-clock mr-2"></i>
+                <span data-lang-en="Playtime" data-lang-ru="Время игры">Playtime</span>
+            </button>
+            <button class="category-tab px-6 py-3 rounded-lg font-semibold transition" data-category="robux">
+                <i class="fas fa-dollar-sign mr-2"></i>
+                <span data-lang-en="Robux Spent" data-lang-ru="Потрачено Robux">Robux Spent</span>
+            </button>
+        </div>
+
+        <!-- Leaderboards -->
+        <div class="space-y-8">
+            <!-- Slaps Leaderboard -->
+            <div id="slaps-leaderboard" class="leaderboard active">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                    <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                        <h3 class="text-xl font-semibold flex items-center">
+                            <i class="fas fa-hand-pointer text-blue-600 mr-2"></i>
+                            <span data-lang-en="Slaps Leaderboard" data-lang-ru="Таблица лидеров по шлепкам">Slaps Leaderboard</span>
+                        </h3>
+                        <span class="refresh-timer text-sm text-gray-500" id="slaps-timer"></span>
                     </div>
-                </div>
-
-                <!-- Time Played Leaderboard -->
-                <div id="time-leaderboard" class="leaderboard-content">
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-                        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                            <h3 class="text-xl font-semibold flex items-center">
-                                <i class="fas fa-clock text-green-600 mr-2"></i>
-                                <span data-lang-en="Playtime Leaderboard" data-lang-ru="Таблица лидеров по времени игры">Playtime Leaderboard</span>
-                                <span class="ml-auto text-sm text-gray-500" id="time-refresh"></span>
-                            </h3>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full" id="time-table">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">#</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-lang-en="Player" data-lang-ru="Игрок">Player</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-lang-en="Playtime" data-lang-ru="Время игры">Playtime</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="time-body"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Robux Spent Leaderboard -->
-                <div id="robux-leaderboard" class="leaderboard-content">
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-                        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                            <h3 class="text-xl font-semibold flex items-center">
-                                <i class="fas fa-dollar-sign text-purple-600 mr-2"></i>
-                                <span data-lang-en="Robux Spent Leaderboard" data-lang-ru="Таблица лидеров по тратам Robux">Robux Spent Leaderboard</span>
-                                <span class="ml-auto text-sm text-gray-500" id="robux-refresh"></span>
-                            </h3>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full" id="robux-table">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">#</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-lang-en="Player" data-lang-ru="Игрок">Player</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-lang-en="Robux" data-lang-ru="Robux">Robux</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="robux-body"></tbody>
-                            </table>
-                        </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50 dark:bg-gray-700">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">#</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-lang-en="Player" data-lang-ru="Игрок">Player</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-lang-en="Slaps" data-lang-ru="Шлепки">Slaps</th>
+                                </tr>
+                            </thead>
+                            <tbody id="slaps-body" class="divide-y divide-gray-200 dark:divide-gray-700"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-        </section>
+
+            <!-- Time Leaderboard -->
+            <div id="time-leaderboard" class="leaderboard">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                    <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                        <h3 class="text-xl font-semibold flex items-center">
+                            <i class="fas fa-clock text-green-600 mr-2"></i>
+                            <span data-lang-en="Playtime Leaderboard" data-lang-ru="Таблица лидеров по времени игры">Playtime Leaderboard</span>
+                        </h3>
+                        <span class="refresh-timer text-sm text-gray-500" id="time-timer"></span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50 dark:bg-gray-700">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">#</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-lang-en="Player" data-lang-ru="Игрок">Player</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-lang-en="Playtime" data-lang-ru="Время игры">Playtime</th>
+                                </tr>
+                            </thead>
+                            <tbody id="time-body" class="divide-y divide-gray-200 dark:divide-gray-700"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Robux Leaderboard -->
+            <div id="robux-leaderboard" class="leaderboard">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                    <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                        <h3 class="text-xl font-semibold flex items-center">
+                            <i class="fas fa-dollar-sign text-purple-600 mr-2"></i>
+                            <span data-lang-en="Robux Spent Leaderboard" data-lang-ru="Таблица лидеров по тратам Robux">Robux Spent Leaderboard</span>
+                        </h3>
+                        <span class="refresh-timer text-sm text-gray-500" id="robux-timer"></span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50 dark:bg-gray-700">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">#</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-lang-en="Player" data-lang-ru="Игрок">Player</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-lang-en="Robux" data-lang-ru="Robux">Robux</th>
+                                </tr>
+                            </thead>
+                            <tbody id="robux-body" class="divide-y divide-gray-200 dark:divide-gray-700"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Footer -->
         <footer class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
@@ -252,19 +172,11 @@
                     <a href="https://www.roblox.com/games/9678437015/" target="_blank" rel="noopener" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 transition">
                         <i class="fab fa-roblox"></i>
                     </a>
-                    <a href="https://discord.gg/towerobby" target="_blank" rel="noopener" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 transition">
-                        <i class="fab fa-discord"></i>
-                    </a>
-                    <a href="https://twitter.com/towerobby" target="_blank" rel="noopener" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 transition">
-                        <i class="fab fa-twitter"></i>
-                    </a>
                 </div>
             </div>
         </footer>
     </main>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/script.js"></script>
 </body>
 </html>
