@@ -1,5 +1,5 @@
 // Ultra Analytics V3 - Enhanced with advanced features
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbxdLWWAKyFLifLoxRCAuCFS9_dzjMQXkr4xj3ivA1Uzy0EhZq0KIKE3HMXFP0aLS3q69g/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzTClw_jWwS-OH_ci2iJD6qbm8pPXpV2LcbK2t3f56cNTKAHlaMonmRDCWjMXNjaA0qkA/exec';
 const API_TOKEN = 's3cr3t-XYZ';
 
 const GAME_CONFIG = {
