@@ -4,22 +4,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Privacy Policy — Tower Obby Productions</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/privacy/css/style.css">
   <meta name="robots" content="index, follow">
+  <meta name="description" content="Privacy policy for Tower Obby Productions — page for our game and community.">
 </head>
-<body class="dark">
-
-  <header class="site-header">
+<body>
+  <header class="site-header" role="banner">
     <div class="inner">
       <div class="brand">
         <span class="logo" aria-hidden="true"></span>
         <h1>Tower Obby Productions</h1>
       </div>
-
       <nav class="header-nav" aria-label="Main navigation">
         <a href="/">Home</a>
-        <a href="/games">Games</a>
-        <a href="/communities">Communities</a>
+        <a href="/games/71240146627158/HD-Admin-Chaos-Tower/">Game</a>
+        <a href="/communities/102552180/Tower-Obby-Productions/">Community</a>
         <a href="/privacy">Privacy</a>
         <a href="/terms">Terms</a>
         <a href="/contact">Contact</a>
@@ -27,55 +26,54 @@
     </div>
   </header>
 
-  <main class="main">
-    <article class="card" role="article" aria-labelledby="privacy-title">
+  <main class="main" role="main">
+    <article class="card" aria-labelledby="privacy-title">
       <h2 id="privacy-title">Privacy Policy</h2>
-
       <p class="small">Last updated: <time datetime="2026-03-14T10:02:00+00:00">March 14, 2026</time></p>
 
       <section>
-        <h3>Introduction</h3>
-        <p>Welcome to Tower Obby Productions. We respect your privacy and take the protection of your personal data seriously. This policy explains what information we collect, how we use it, and your rights.</p>
+        <h3>Scope</h3>
+        <p>This website is an official landing page for our Roblox game and community pages only. We do not operate as a large platform — this site provides game information, links to Roblox, and community details.</p>
       </section>
 
       <section>
-        <h3>Information We Collect</h3>
-        <p>We may collect the following types of information:</p>
+        <h3>What we collect</h3>
+        <p>We collect only minimal information necessary for site functionality and analytics:</p>
         <ul>
-          <li>Non-personal technical data (browser, device type, IP address for analytics)</li>
-          <li>Data you voluntarily provide (contact form messages, email)</li>
+          <li>Non-personal technical data: IP (for server), browser, device type, timestamps (for logs and basic analytics)</li>
+          <li>Data you voluntarily provide: messages via contact form or email (only if you send them)</li>
         </ul>
-        <p class="small">We do not collect personal data without your consent.</p>
+        <p class="small"><strong>We do not</strong> sell personal data. We do not store payment information (Roblox payments are handled entirely by Roblox).</p>
       </section>
 
       <section>
-        <h3>How We Use Information</h3>
-        <p>Data is used to improve site functionality, respond to inquiries, and for analytics. We do not sell personal data to third parties.</p>
+        <h3>Cookies & analytics</h3>
+        <p>We use cookies and third-party analytics (e.g., Google Analytics) to monitor site performance and usage. These tools collect aggregated, non-identifying metrics — active players, visits, and pageviews. You can opt out by disabling cookies in your browser.</p>
       </section>
 
       <section>
-        <h3>Cookies</h3>
-        <p>We use cookies and similar technologies to provide basic site functionality and analytics. You can disable cookies in your browser, but some parts of the site may not work correctly.</p>
-      </section>
-
-      <section>
-        <h3>Third-Party Services</h3>
-        <p>We may use third-party services (such as analytics or hosting). These providers have their own privacy policies — please review them when needed.</p>
+        <h3>Third-party services</h3>
+        <p>We link to Roblox and may use external services for hosting, analytics, and CDN (GitHub Pages, Cloudflare, Google). Each third party has its own privacy policy.</p>
       </section>
 
       <section>
         <h3>Children</h3>
-        <p>Our site and services are not intended for children under 13. If you believe we have collected personal data from a child, contact us and we will remove it.</p>
+        <p>The content is primarily about a Roblox game. We do not knowingly collect information from children under 13. If you believe we have collected such data, contact us and we will promptly remove it.</p>
       </section>
 
       <section>
-        <h3>Changes to This Policy</h3>
-        <p>We may update this policy occasionally. The latest version will be available at <a href="/privacy">/privacy</a>.</p>
+        <h3>Data retention & security</h3>
+        <p>Contact messages may be kept until the issue is resolved. We protect data with standard measures provided by our hosting and Cloudflare. Absolute security cannot be guaranteed, but we follow common best practices.</p>
+      </section>
+
+      <section>
+        <h3>Changes</h3>
+        <p>We may update this policy. The latest version is available at <a href="/privacy">/privacy</a>. Significant changes will be noted with an updated date above.</p>
       </section>
 
       <section>
         <h3>Contact</h3>
-        <p>If you have questions about this policy, please use our <a href="/contact">contact page</a>.</p>
+        <p>If you have questions about privacy, contact us via the <a href="/contact">contact page</a> or email listed there.</p>
       </section>
     </article>
   </main>
@@ -83,17 +81,17 @@
   <footer class="site-footer" role="contentinfo">
     <div class="container">
       <p class="footer-text">© <strong>Tower Obby Productions</strong> — All rights reserved.</p>
-      <p class="footer-text">Built with ❤️ — <a class="footer-link" href="/">towerobbydev.fun</a></p>
+      <p class="footer-text">Site for game & community — <a class="footer-link" href="/">towerobbydev.fun</a></p>
     </div>
   </footer>
 
   <script>
-    // Optional: auto-detect system theme and apply class (light or dark).
+    // Apply theme from localStorage (prevents flash if set)
     try {
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      document.documentElement.classList.toggle('dark', prefersDark);
-      document.documentElement.classList.toggle('light', !prefersDark);
-    } catch (e) { /* ignore */ }
+      const stored = localStorage.getItem('theme') || 'dark';
+      document.documentElement.classList.toggle('dark', stored === 'dark');
+      document.documentElement.classList.toggle('light', stored === 'light');
+    } catch(e){}
   </script>
 </body>
 </html>
