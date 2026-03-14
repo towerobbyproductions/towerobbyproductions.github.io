@@ -4,6 +4,9 @@ const GROUP_ID = '102552180';
 const ROOT_PLACE_ID = '71240146627158';
 const gamesApi = `https://games.roproxy.com/v1/games?universeIds=${UNIVERSE_ID}`;
 
+// <-- NEW: твой Worker URL -->
+const WORKER_URL = 'https://young-breeze-5b43.robloxtop1742.workers.dev'; // <- оставь свой Worker URL
+
 // elements
 const el = {
   about: document.getElementById('communityAbout'),
@@ -41,7 +44,7 @@ applyTranslations();
 function getTheme(){
   return document.documentElement.classList.contains('light') ? 'light' : 'dark';
 }
-function setTheme(t){ 
+function setTheme(t){
   if (t === 'light') { document.documentElement.classList.add('light'); document.documentElement.classList.remove('dark'); }
   else { document.documentElement.classList.add('dark'); document.documentElement.classList.remove('light'); }
   localStorage.setItem('theme', t);
@@ -86,7 +89,7 @@ function fmt(n){ return new Intl.NumberFormat().format(n); }
 el.about.textContent = I18N[currentLang].loading_about;
 el.members.textContent = 'Loading…';
 
-// fetch games data
+// fetch games data (unchanged)
 fetch(gamesApi)
   .then(r=>r.ok? r.json() : Promise.reject(r))
   .then(json=>{
@@ -156,18 +159,24 @@ fetch(gamesApi)
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
-// fetch group info (best-effort)
+// fetch group info (best-effort) — CHANGED to use your Worker proxy
 (async function fetchGroup(){
   try {
-    const res = await fetch(`https://groups.roproxy.com/v1/groups/${GROUP_ID}`);
-    if (!res.ok) throw new Error('group fetch failed');
+    // use the Cloudflare Worker proxy to avoid CORS issues
+    const workerUrl = 'https://young-breeze-5b43.robloxtop1742.workers.dev'; // <- your Worker URL
+    const res = await fetch(`${workerUrl}/group/${GROUP_ID}`, { method: 'GET' });
+    if (!res.ok) throw new Error('group fetch failed: ' + res.status);
     const data = await res.json();
+
     const members = data.memberCount || data.membersCount || (data.data && data.data.memberCount);
     const about = data.description || data.about;
+
     if (members) el.members.textContent = `${fmt(members)} ${I18N[currentLang].members_suffix}`;
     else el.members.textContent = '65K+ ' + I18N[currentLang].members_suffix;
+
     if (about && el.about.textContent.includes('Loading')) el.about.textContent = about;
   } catch(e){
+    console.error(e);
     el.members.textContent = '65K+ ' + I18N[currentLang].members_suffix;
   }
 })();
