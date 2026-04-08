@@ -1,4 +1,4 @@
-const API_KEY = "PASTE_YOUR_YOUTUBE_API_KEY_HERE";
+const API_KEY = "AIzaSyCZnGmPwNLng-k2RHooQtcehQO62oTiTcU";
 
 // Optional proxy support:
 // If you later create your own backend/proxy, replace this with your endpoint.
