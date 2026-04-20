@@ -261,7 +261,7 @@ function detectMaturity(gameData) {
     for (const c of candidates) {
         if (c !== undefined && c !== null && String(c).trim() !== '') return String(c);
     }
-    return 'Minimal';
+    return 'Mild';
 }
 
 function renderSliderImages(images) {
