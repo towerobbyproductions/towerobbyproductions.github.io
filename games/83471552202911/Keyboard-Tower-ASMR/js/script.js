@@ -27,9 +27,8 @@ const DEFAULT_GAME_DATA = {
     maturity: 'Mild',
     rootPlaceId: '83471552202911',
     images: [
-        'https://tr.rbxcdn.com/180DAY-ac99810b043fcc8b90d47a062764b279/768/432/Image/Webp/noFilter?auto=compress&cs=tinysrgb&w=1200',
-        'https://tr.rbxcdn.com/180DAY-0319103f58ead123c482d498a9ad2494/768/432/Image/Webp/noFilter?auto=compress&cs=tinysrgb&w=1200',
-        'https://tr.rbxcdn.com/180DAY-0ea63b43b51f872ed2a3f00272ab3285/768/432/Image/Webp/noFilter'
+        'https://tr.rbxcdn.com/180DAY-a14b4b3ff0618d0469be40bada438ff5/768/432/Image/Webp/noFilter?auto=compress&cs=tinysrgb&w=1200',
+        'https://tr.rbxcdn.com/180DAY-e29a70e8fb97f2c614fce5dabe8e235a/768/432/Image/Webp/noFilter?auto=compress&cs=tinysrgb&w=1200',
     ]
 };
 
