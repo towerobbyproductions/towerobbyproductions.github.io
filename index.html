@@ -5,33 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tower Obby Productions - Games & Community</title>
-   
+
     <!-- SEO и социальные сети -->
-<meta name="description" content="Official website of Tower Obby Productions. Discover our Roblox games, including HD Admin Chaos Tower, and join our growing community of over 84,000 members." />
-<meta property="og:site_name" content="towerobbydev.fun" />
-<meta property="og:title" content="towerobbydev.fun" />
-<meta property="og:description" content="Explore games and real-time stats from Tower Obby Productions." />
-<meta property="og:url" content="towerobbydev.fun" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://towerobbydev.fun/site/assets/icon/favicon64х64.ico">
+    <meta name="description" content="Official website of Tower Obby Productions. Discover our Roblox games, including HD Admin Chaos Tower and Keyboard Tower ASMR, and join our growing community of over 84,000 members." />
+    <meta property="og:site_name" content="towerobbydev.fun" />
+    <meta property="og:title" content="towerobbydev.fun" />
+    <meta property="og:description" content="Explore games and real-time stats from Tower Obby Productions." />
+    <meta property="og:url" content="towerobbydev.fun" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://towerobbydev.fun/site/assets/icon/favicon64х64.ico">
 
-<!-- Прямое указание названия для Google -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "Tower Obby Productions",
-  "alternateName": ["TowerObby", "TOP"],
-  "url": "towerobbydev.fun"
-}
-</script>
+    <!-- Прямое указание названия для Google -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Tower Obby Productions",
+      "alternateName": ["TowerObby", "TOP"],
+      "url": "towerobbydev.fun"
+    }
+    </script>
 
-  
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CMD2XJLJYW"></script>
 <script>
@@ -41,10 +41,8 @@
   gtag('config', 'G-CMD2XJLJYW');
 </script>
 
-    
-    <body>
+<body>
     <div class="page-wrapper">
-        <!-- Header с управлением -->
         <header class="site-header">
             <div class="container header-container">
                 <div class="logo">
@@ -64,45 +62,18 @@
 
         <main class="main-content">
             <div class="container">
-                <!-- Заголовок страницы -->
                 <div class="page-header">
                     <h1 class="page-title" data-ru="Игровое сообщество" data-en="Gaming Community">Gaming Community</h1>
                     <p class="page-subtitle" data-ru="Актуальная статистика игр и сообщества" data-en="Real-time stats for games and community">Real-time stats for games and community</p>
                 </div>
 
-                <!-- Карточка игры -->
+                <!-- Карточки игр -->
                 <section class="section" id="gameSection">
-                    <h2 class="section-title" data-ru="Популярная игра" data-en="Featured Game">Featured Game</h2>
+                    <h2 class="section-title" data-ru="Популярные игры" data-en="Featured Games">Featured Games</h2>
                     <div class="game-card-wrapper">
-                        <a href="https://towerobbydev.fun/games/71240146627158/HD-Admin-Chaos-Tower/" class="game-card" id="gameCard" target="_blank">
-                            <div class="game-thumbnail-container">
-                                <div class="game-thumbnail-wrapper">
-                                    <img src="" alt="Game thumbnail" class="game-thumbnail" id="gameThumbnail">
-                                </div>
-                                <div class="game-badge">🔥 HOT</div>
-                            </div>
-                            <div class="game-info">
-                                <h3 class="game-title" id="gameTitle">HD Admin Chaos Tower</h3>
-                                <div class="game-meta-row">
-                                    <span class="game-price" id="gamePrice">💥Admin for 2 Robux</span>
-                                    <span class="game-rating" id="gameRating">86%</span>
-                                </div>
-                                <div class="game-stats">
-                                    <div class="stat-item">
-                                        <span class="stat-label" data-ru="Активно" data-en="Active">Active</span>
-                                        <span class="stat-value" id="gameActive">949</span>
-                                    </div>
-                                    <div class="stat-item">
-                                        <span class="stat-label" data-ru="Визитов" data-en="Visits">Visits</span>
-                                        <span class="stat-value" id="gameVisits">855.8K</span>
-                                    </div>
-                                </div>
-                                <div class="game-categories" id="gameCategories">
-                                    <span class="category-tag">Obby & Platformer</span>
-                                    <span class="category-tag">Tower Obby</span>
-                                </div>
-                            </div>
-                        </a>
+                        <div id="gamesGrid" class="games-grid">
+                            <!-- cards from JS -->
+                        </div>
                     </div>
                 </section>
 
@@ -123,11 +94,11 @@
                             <div class="community-stats">
                                 <div class="stat-card">
                                     <div class="stat-card-label" data-ru="Участников" data-en="Members">Members</div>
-                                    <div class="stat-card-value" id="communityMembers">469 855</div>
+                                    <div class="stat-card-value" id="communityMembers">—</div>
                                 </div>
                                 <div class="stat-card">
                                     <div class="stat-card-label" data-ru="Игр" data-en="Games">Games</div>
-                                    <div class="stat-card-value" id="communityGames">3</div>
+                                    <div class="stat-card-value" id="communityGames">—</div>
                                 </div>
                             </div>
                             <div class="community-actions">
@@ -142,33 +113,31 @@
                     </div>
                 </section>
 
-                <!-- Дополнительная информация -->
                 <section class="section" id="aboutSection">
                     <h2 class="section-title" data-ru="О проекте" data-en="About">About</h2>
                     <div class="about-content">
-                        <p data-ru="Tower Obby Productions - это сообщество разработчиков, создающих увлекательные игры в жанре Obby и Platformer. Наш флагманский проект HD Admin Chaos Tower предлагает уникальный игровой опыт с админ-панелью и захватывающими уровнями." 
-                           data-en="Tower Obby Productions is a community of developers creating exciting Obby and Platformer games. Our flagship project HD Admin Chaos Tower offers a unique gaming experience with admin panel and exciting levels.">
-                            Tower Obby Productions is a community of developers creating exciting Obby and Platformer games. Our flagship project HD Admin Chaos Tower offers a unique gaming experience with admin panel and exciting levels.
+                        <p data-ru="Tower Obby Productions - это сообщество разработчиков, создающих увлекательные игры в жанре Obby и Platformer. Наши главные проекты — HD Admin Chaos Tower и Keyboard Tower ASMR — предлагают разные, но одинаково интересные игровые впечатления." 
+                           data-en="Tower Obby Productions is a community of developers creating exciting Obby and Platformer games. Our main projects — HD Admin Chaos Tower and Keyboard Tower ASMR — offer different but equally engaging gameplay experiences.">
+                            Tower Obby Productions is a community of developers creating exciting Obby and Platformer games. Our main projects — HD Admin Chaos Tower and Keyboard Tower ASMR — offer different but equally engaging gameplay experiences.
                         </p>
                     </div>
                 </section>
             </div>
         </main>
 
-       <!-- Footer -->
-<footer class="site-footer">
-    <div class="container">
-        <p class="footer-text">
-            © 2026 <a href="https://towerobbydev.fun" class="footer-link">Tower Obby Productions</a>. All rights reserved.
-        </p>
-        <p class="footer-text mt-2">
-            <a href="/privacy" class="footer-link">Privacy Policy</a> |
-            <a href="/terms" class="footer-link">Terms of Service</a> |
-            <a href="/games/71240146627158" class="footer-link">Game</a> |
-            <a href="/communities/102552180" class="footer-link">Community</a>
-        </p>
-    </div>
-</footer>
+        <footer class="site-footer">
+            <div class="container">
+                <p class="footer-text">
+                    © <span id="year"></span> <a href="https://towerobbydev.fun" class="footer-link">Tower Obby Productions</a>. All rights reserved.
+                </p>
+                <p class="footer-text mt-2">
+                    <a href="/privacy" class="footer-link">Privacy Policy</a> |
+                    <a href="/terms" class="footer-link">Terms of Service</a> |
+                    <a href="/games/71240146627158" class="footer-link">Game</a> |
+                    <a href="/communities/102552180" class="footer-link">Community</a>
+                </p>
+            </div>
+        </footer>
     </div>
 
     <script src="script.js"></script>
