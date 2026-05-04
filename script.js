@@ -62,6 +62,10 @@ async function init() {
   setLanguage(state.currentLang);
   setupEventListeners();
 
+  // сразу показываем кэш, если он есть
+  loadCachedData();
+
+  // потом обновляем живыми данными
   await loadAllData();
   setInterval(loadAllData, CONFIG.UPDATE_INTERVAL);
 
@@ -124,10 +128,15 @@ async function loadAllData() {
   state.isLoading = true;
 
   try {
-    await Promise.all([
+    const results = await Promise.allSettled([
       loadGames(),
       loadCommunity()
     ]);
+
+    // если что-то упало, не роняем всю страницу
+    results.forEach(r => {
+      if (r.status === 'rejected') console.error(r.reason);
+    });
 
     renderGames();
     cacheData('games', state.games);
@@ -135,6 +144,7 @@ async function loadAllData() {
   } catch (error) {
     console.error('Load error:', error);
     loadCachedData();
+    renderGames();
   } finally {
     state.isLoading = false;
   }
@@ -144,23 +154,15 @@ async function loadGames() {
   const results = await Promise.all(
     EXPERIENCES.map(async (item) => {
       try {
-        const gameResponse = await fetch(`https://games.roproxy.com/v1/games?universeIds=${item.universeId}`, { cache: 'no-store' });
-        const gameJson = gameResponse.ok ? await gameResponse.json() : null;
-        const game = gameJson?.data?.[0] || null;
+        const [game, iconUrl, votes] = await Promise.all([
+          fetchGame(item.universeId),
+          fetchGameIcon(item.universeId, item.thumb),
+          fetchVotes(item.universeId)
+        ]);
 
-        const iconResponse = await fetch(`https://thumbnails.roproxy.com/v1/games/icons?universeIds=${item.universeId}&size=512x512&format=Png`, { cache: 'no-store' });
-        const iconJson = iconResponse.ok ? await iconResponse.json() : null;
-        const iconUrl = iconJson?.data?.[0]?.imageUrl || item.thumb;
-
-        const votes = await fetchVotes(item.universeId);
-
-        return {
-          fallback: item,
-          game,
-          iconUrl,
-          votes
-        };
+        return { fallback: item, game, iconUrl, votes };
       } catch (e) {
+        console.error('Game load failed:', item.universeId, e);
         return {
           fallback: item,
           game: null,
@@ -183,7 +185,7 @@ async function loadGames() {
         title: g.name || f.titleFallback,
         placeId: f.placeId,
         slug: f.slug,
-        iconUrl: item.iconUrl,
+        iconUrl: item.iconUrl || f.thumb,
         visits,
         active,
         rating: getRatingPercent(item.votes, g),
@@ -193,6 +195,27 @@ async function loadGames() {
       };
     })
     .sort((a, b) => b.visits - a.visits);
+}
+
+async function fetchGame(universeId) {
+  const res = await fetch(`https://games.roproxy.com/v1/games?universeIds=${universeId}`, { cache: 'no-store' });
+  if (!res.ok) return null;
+  const json = await res.json();
+  return json?.data?.[0] || null;
+}
+
+async function fetchGameIcon(universeId, fallbackUrl) {
+  try {
+    const res = await fetch(
+      `https://thumbnails.roproxy.com/v1/games/icons?universeIds=${universeId}&size=512x512&format=Png`,
+      { cache: 'no-store' }
+    );
+    if (!res.ok) return fallbackUrl;
+    const json = await res.json();
+    return json?.data?.[0]?.imageUrl || fallbackUrl;
+  } catch {
+    return fallbackUrl;
+  }
 }
 
 async function fetchVotes(universeId) {
@@ -216,7 +239,7 @@ async function fetchVotes(universeId) {
         return item;
       }
     } catch (e) {
-      // try next url
+      // пробуем следующий URL
     }
   }
 
@@ -240,27 +263,37 @@ function getRatingPercent(votes, game) {
   return null;
 }
 
-async function loadCommunityData() {
+async function loadCommunity() {
   try {
-    const groupResponse = await fetch(`https://groups.roproxy.com/v1/groups/${CONFIG.COMMUNITY_GROUP_ID}`, { cache: 'no-store' });
-    const groupData = groupResponse.ok ? await groupResponse.json() : null;
-    state.community = groupData || null;
+    const res = await fetch(`https://groups.roproxy.com/v1/groups/${CONFIG.COMMUNITY_GROUP_ID}`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`group fetch failed: ${res.status}`);
 
-    if (groupData?.memberCount && elements.communityMembers) {
-      elements.communityMembers.textContent = formatNumber(groupData.memberCount);
+    const data = await res.json();
+    state.community = data || null;
+
+    const members =
+      data?.memberCount ??
+      data?.membersCount ??
+      data?.data?.memberCount ??
+      data?.data?.membersCount ??
+      data?.members ??
+      data?.count;
+
+    if (members !== undefined && members !== null && elements.communityMembers) {
+      elements.communityMembers.textContent = formatNumber(members);
     }
 
     if (elements.communityGames) {
       elements.communityGames.textContent = String(EXPERIENCES.length);
     }
 
-    if (groupData?.name && elements.communityName) {
-      elements.communityName.textContent = groupData.name;
+    if (data?.name && elements.communityName) {
+      elements.communityName.textContent = data.name;
     }
 
-    if (groupData?.description) {
+    if (data?.description) {
       const p = document.querySelector('#aboutSection p');
-      if (p) p.textContent = groupData.description;
+      if (p) p.textContent = data.description;
     }
 
     if (elements.communityCard) {
@@ -268,7 +301,16 @@ async function loadCommunityData() {
       setTimeout(() => elements.communityCard.classList.remove('data-updated'), 600);
     }
   } catch (e) {
-    if (elements.communityGames) elements.communityGames.textContent = String(EXPERIENCES.length);
+    console.error('Community load failed:', e);
+
+    if (elements.communityGames) {
+      elements.communityGames.textContent = String(EXPERIENCES.length);
+    }
+
+    // запасной вариант, чтобы не было пусто
+    if (elements.communityMembers && !elements.communityMembers.textContent.trim()) {
+      elements.communityMembers.textContent = '—';
+    }
   }
 }
 
@@ -278,6 +320,14 @@ function renderGames() {
   elements.gamesGrid.innerHTML = '';
 
   const sortedGames = [...state.games].sort((a, b) => b.visits - a.visits);
+
+  if (!sortedGames.length) {
+    const empty = document.createElement('div');
+    empty.className = 'p-4 text-sm';
+    empty.textContent = 'No games loaded.';
+    elements.gamesGrid.appendChild(empty);
+    return;
+  }
 
   sortedGames.forEach((game, index) => {
     const card = document.createElement('a');
@@ -357,7 +407,6 @@ function loadCachedData() {
       const parsed = JSON.parse(gamesCache);
       if (Date.now() - parsed.timestamp < CONFIG.CACHE_DURATION) {
         state.games = parsed.data || [];
-        renderGames();
       }
     }
 
