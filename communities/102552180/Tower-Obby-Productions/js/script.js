@@ -1,7 +1,6 @@
 // config
 const GROUP_ID = '102552180';
 
-// Игры в списке Experiences
 const EXPERIENCES = [
   {
     titleFallback: 'HD Admin Chaos Tower',
@@ -21,7 +20,7 @@ const EXPERIENCES = [
   }
 ];
 
-// <-- твой Worker URL -->
+// Worker URL
 const WORKER_URL = 'https://young-breeze-5b43.robloxtop1742.workers.dev';
 
 // elements
@@ -65,8 +64,10 @@ const I18N = {
 };
 
 let currentLang = localStorage.getItem('siteLang') || window.__SITE_LANG || 'en';
+let liveGamesData = [];
+let liveVotesData = [];
 
-// apply translations
+// translations
 function applyTranslations() {
   document.querySelectorAll('[data-i18n]').forEach(node => {
     const key = node.getAttribute('data-i18n');
@@ -78,7 +79,7 @@ function applyTranslations() {
 }
 applyTranslations();
 
-// Theme utilities
+// theme
 function getTheme() {
   return document.documentElement.classList.contains('light') ? 'light' : 'dark';
 }
@@ -102,14 +103,12 @@ function updateThemeButton() {
   el.themeToggle.setAttribute('aria-pressed', cur === 'dark' ? 'true' : 'false');
 }
 
-// init theme
 (function initTheme() {
   const stored = localStorage.getItem('theme');
   const theme = stored || (document.documentElement.classList.contains('light') ? 'light' : 'dark');
   setTheme(theme);
 })();
 
-// theme toggle
 if (el.themeToggle) {
   el.themeToggle.addEventListener('click', () => {
     const now = getTheme() === 'dark' ? 'light' : 'dark';
@@ -117,14 +116,14 @@ if (el.themeToggle) {
   });
 }
 
-// language toggle
+// language
 if (el.langToggle) {
   el.langToggle.addEventListener('click', () => {
     currentLang = currentLang === 'en' ? 'ru' : 'en';
     localStorage.setItem('siteLang', currentLang);
     document.documentElement.lang = currentLang;
     applyTranslations();
-    renderAllExperienceCards(); // чтобы подписи обновлялись
+    renderAllExperienceCards();
   });
 }
 
@@ -137,12 +136,8 @@ function setMembersText(value) {
   if (el.members) el.members.textContent = value;
 }
 
-// placeholders
 if (el.about) el.about.textContent = I18N[currentLang].loading_about;
 setMembersText('Loading…');
-
-// опыт / игры
-let liveGamesData = [];
 
 // fetch one game
 async function fetchGameByUniverseId(universeId) {
@@ -153,17 +148,24 @@ async function fetchGameByUniverseId(universeId) {
   return json?.data?.[0] || null;
 }
 
-function makeRatingPercent(fav, visits) {
-  let ratingPercent = 0;
-  if (visits > 0) {
-    ratingPercent = Math.round((fav / (visits / 1000)) * 100);
-    if (!isFinite(ratingPercent) || ratingPercent < 0) ratingPercent = 0;
-    if (ratingPercent > 99) ratingPercent = 99;
-  }
-  return ratingPercent;
+// fetch votes for one game
+async function fetchVotesByUniverseId(universeId) {
+  const url = `https://games.roproxy.com/v1/games/votes?universeIds=${universeId}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed votes fetch: ${universeId}`);
+  const json = await res.json();
+  return json?.data?.[0] || null;
 }
 
-function createExperienceCard(g, fallback) {
+function getRatingPercent(votes) {
+  const up = Number(votes?.upVotes || 0);
+  const down = Number(votes?.downVotes || 0);
+  const total = up + down;
+  if (!total) return 0;
+  return Math.round((up / total) * 100);
+}
+
+function createExperienceCard(g, votes, fallback) {
   const card = document.createElement('a');
   card.className = 'exp-card';
   card.href = `https://www.roblox.com/games/${fallback.placeId}/`;
@@ -189,8 +191,7 @@ function createExperienceCard(g, fallback) {
 
   const playing = g?.playing || 0;
   const visits = g?.visits || 0;
-  const fav = g?.favoritedCount || 0;
-  const ratingPercent = makeRatingPercent(fav, visits);
+  const ratingPercent = getRatingPercent(votes);
 
   const meta = document.createElement('div');
   meta.className = 'exp-meta mt-1';
@@ -227,7 +228,8 @@ function renderAllExperienceCards() {
 
   EXPERIENCES.forEach((fallback, index) => {
     const g = liveGamesData[index] || null;
-    const card = createExperienceCard(g, fallback);
+    const votes = liveVotesData[index] || null;
+    const card = createExperienceCard(g, votes, fallback);
     el.experiencesGrid.appendChild(card);
   });
 
@@ -269,7 +271,7 @@ function renderAllExperienceCards() {
   }
 })();
 
-// fetch all games and render both cards
+// fetch all games + votes
 (async function fetchExperiences() {
   try {
     if (el.experiencesGrid) {
@@ -280,22 +282,32 @@ function renderAllExperienceCards() {
       el.experiencesGrid.appendChild(loading);
     }
 
-    const results = await Promise.all(
-      EXPERIENCES.map(async (item) => {
+    const [gamesResults, votesResults] = await Promise.all([
+      Promise.all(EXPERIENCES.map(async (item) => {
         try {
           return await fetchGameByUniverseId(item.universeId);
         } catch (err) {
           console.error('Game fetch failed:', item.universeId, err);
           return null;
         }
-      })
-    );
+      })),
+      Promise.all(EXPERIENCES.map(async (item) => {
+        try {
+          return await fetchVotesByUniverseId(item.universeId);
+        } catch (err) {
+          console.error('Votes fetch failed:', item.universeId, err);
+          return null;
+        }
+      }))
+    ]);
 
-    liveGamesData = results;
+    liveGamesData = gamesResults;
+    liveVotesData = votesResults;
     renderAllExperienceCards();
   } catch (err) {
     console.error(err);
     liveGamesData = [];
+    liveVotesData = [];
     if (el.experiencesGrid) {
       el.experiencesGrid.innerHTML = '';
       const fallback = document.createElement('div');
