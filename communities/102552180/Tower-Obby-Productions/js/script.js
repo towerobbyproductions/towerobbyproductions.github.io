@@ -15,7 +15,7 @@ const EXPERIENCES = [
     titleFallback: '🎧 Keyboard Tower ASMR',
     universeId: '10108284887',
     placeId: '83471552202911',
-    thumb: 'https://tr.rbxcdn.com/180DAY-0d89850eddf82db8a49293be85d3ae68/512/512/Image/Webp/noFilter',
+    thumb: 'https://tr.rbxcdn.com/180DAY-ae236ac09db08e270ad769f16dda809a/512/512/Image/Webp/noFilter',
     genreFallback1: 'Obby & Platformer',
     genreFallback2: 'Tower Obby'
   }
