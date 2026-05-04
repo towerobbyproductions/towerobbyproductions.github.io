@@ -142,7 +142,7 @@ setMembersText('Loading…');
 // fetch one game
 async function fetchGameByUniverseId(universeId) {
   const url = `https://games.roproxy.com/v1/games?universeIds=${universeId}`;
-  const res = await fetch(url);
+  const res = await fetch(url, { cache: 'no-store' });
   if (!res.ok) throw new Error(`Failed game fetch: ${universeId}`);
   const json = await res.json();
   return json?.data?.[0] || null;
@@ -150,18 +150,43 @@ async function fetchGameByUniverseId(universeId) {
 
 // fetch votes for one game
 async function fetchVotesByUniverseId(universeId) {
-  const url = `https://games.roproxy.com/v1/games/votes?universeIds=${universeId}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Failed votes fetch: ${universeId}`);
-  const json = await res.json();
-  return json?.data?.[0] || null;
+  const urls = [
+    `https://games.roproxy.com/v1/games/votes?universeIds=${universeId}`,
+    `https://games.roproxy.com/v1/games/${universeId}/votes`
+  ];
+
+  for (const url of urls) {
+    try {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) continue;
+
+      const json = await res.json();
+
+      const item =
+        (Array.isArray(json?.data) && json.data[0]) ||
+        json?.data ||
+        json;
+
+      if (item && (item.upVotes !== undefined || item.downVotes !== undefined)) {
+        return item;
+      }
+    } catch (e) {
+      // try next URL
+    }
+  }
+
+  return null;
 }
 
 function getRatingPercent(votes) {
-  const up = Number(votes?.upVotes || 0);
-  const down = Number(votes?.downVotes || 0);
+  const up = Number(votes?.upVotes);
+  const down = Number(votes?.downVotes);
+
+  if (!Number.isFinite(up) || !Number.isFinite(down)) return null;
+
   const total = up + down;
-  if (!total) return 0;
+  if (total <= 0) return null;
+
   return Math.round((up / total) * 100);
 }
 
@@ -192,12 +217,13 @@ function createExperienceCard(g, votes, fallback) {
   const playing = g?.playing || 0;
   const visits = g?.visits || 0;
   const ratingPercent = getRatingPercent(votes);
+  const ratingText = ratingPercent === null ? '—' : `${ratingPercent}%`;
 
   const meta = document.createElement('div');
   meta.className = 'exp-meta mt-1';
   meta.innerHTML = `
     <div class="flex items-center gap-2">
-      <span class="exp-rating">${ratingPercent}%</span>
+      <span class="exp-rating">${ratingText}</span>
       <span>${fmt(playing)} ${I18N[currentLang].active_suffix}</span>
       <span>•</span>
       <span>${fmt(visits)} ${I18N[currentLang].visits_suffix}</span>
@@ -262,8 +288,8 @@ function renderAllExperienceCards() {
       setMembersText(`65K+ ${I18N[currentLang].members_suffix}`);
     }
 
-    if (about) {
-      if (el.about) el.about.textContent = about;
+    if (about && el.about) {
+      el.about.textContent = about;
     }
   } catch (e) {
     console.error(e);
