@@ -3,7 +3,7 @@ const CONFIG = {
   DEFAULT_UNIVERSE_ID: '10108284887',
   REFRESH_INTERVAL: 25000,
   CACHE_KEY: 'live_roblox_stats_theme',
-  APPS_SCRIPT_URL: 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE'
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwt2Y9r_fKy0d1bMdVt_jj7EIDZ8A1Z4-LVmjQD-sJ78fpCNotfM1Sg5L5ysKrnGn8mNw/exec'
 };
 
 const state = {
