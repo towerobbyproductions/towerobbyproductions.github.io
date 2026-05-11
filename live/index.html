@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Roblox Game Stats</title>
+  <meta name="description" content="Live Roblox game stats viewer with universeId / placeId search, live active players, and soft refresh animations." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page-wrapper">
+    <header class="site-header">
+      <div class="container header-container">
+        <div class="logo-block">
+          <div class="logo-dot"></div>
+          <div>
+            <div class="logo-text">Live Roblox Stats</div>
+            <div class="logo-subtext">universeId / placeId</div>
+          </div>
+        </div>
+
+        <div class="header-controls">
+          <button class="pill-button" id="themeToggle" type="button" aria-label="Toggle theme">
+            <span id="themeIcon">🌙</span>
+            <span id="themeLabel">Dark</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="container">
+        <section class="hero">
+          <div class="hero-copy">
+            <span class="live-badge"><span class="live-dot"></span> Live data</span>
+            <h1>Track any Roblox game in real time</h1>
+            <p>
+              Enter a universeId or placeId and this page will show live game data:
+              active players, visits, votes, genre, creator, and thumbnail.
+            </p>
+          </div>
+
+          <div class="search-card">
+            <label class="input-label" for="gameIdInput">Game ID</label>
+            <div class="search-row">
+              <input
+                id="gameIdInput"
+                class="search-input"
+                type="text"
+                inputmode="numeric"
+                placeholder="10108284887"
+                autocomplete="off"
+              />
+              <button id="searchBtn" class="search-button" type="button">Load</button>
+            </div>
+            <div class="search-hint">
+              Default example: <strong>10108284887</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="status-strip">
+          <div class="status-item">
+            <span class="status-label">Mode</span>
+            <span class="status-value" id="resolvedMode">universeId</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Current ID</span>
+            <span class="status-value mono" id="resolvedId">10108284887</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Auto refresh</span>
+            <span class="status-value" id="refreshInfo">25s</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Last update</span>
+            <span class="status-value" id="lastUpdated">—</span>
+          </div>
+        </section>
+
+        <section class="game-shell" id="gameShell">
+          <div class="game-media">
+            <div class="thumb-frame">
+              <img id="gameThumb" class="game-thumb" alt="Game thumbnail" src="" />
+            </div>
+          </div>
+
+          <div class="game-main">
+            <div class="title-row">
+              <div>
+                <div class="game-kicker" id="gameKicker">Loading…</div>
+                <h2 id="gameTitle">—</h2>
+              </div>
+              <div class="mini-badge" id="priceBadge">Free</div>
+            </div>
+
+            <p class="game-description" id="gameDescription">Waiting for data…</p>
+
+            <div class="stat-grid">
+              <article class="stat-card highlight" id="activeCard">
+                <div class="stat-top">
+                  <span class="stat-name">Active</span>
+                  <span class="change-pill" id="activeChange">—</span>
+                </div>
+                <div class="stat-value big" id="gameActive">—</div>
+                <div class="stat-foot">players now</div>
+              </article>
+
+              <article class="stat-card">
+                <div class="stat-top">
+                  <span class="stat-name">Visits</span>
+                </div>
+                <div class="stat-value" id="gameVisits">—</div>
+                <div class="stat-foot">all-time visits</div>
+              </article>
+
+              <article class="stat-card">
+                <div class="stat-top">
+                  <span class="stat-name">Rating</span>
+                </div>
+                <div class="stat-value" id="gameRating">—</div>
+                <div class="stat-foot">upvote ratio</div>
+              </article>
+
+              <article class="stat-card">
+                <div class="stat-top">
+                  <span class="stat-name">Max players</span>
+                </div>
+                <div class="stat-value" id="gameMaxPlayers">—</div>
+                <div class="stat-foot">server capacity</div>
+              </article>
+            </div>
+
+            <div class="info-grid">
+              <div class="info-row">
+                <span class="info-label">Creator</span>
+                <span class="info-value" id="gameCreator">—</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Genre</span>
+                <span class="info-value" id="gameGenre">—</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Universe ID</span>
+                <span class="info-value mono" id="universeIdValue">—</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Place ID</span>
+                <span class="info-value mono" id="placeIdValue">—</span>
+              </div>
+            </div>
+
+            <div class="actions-row">
+              <a id="playLink" class="action-button primary" href="#" target="_blank" rel="noopener noreferrer">Open game</a>
+              <button id="refreshBtn" class="action-button secondary" type="button">Refresh now</button>
+            </div>
+
+            <div class="message-box" id="messageBox">Enter an ID and press Load.</div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
