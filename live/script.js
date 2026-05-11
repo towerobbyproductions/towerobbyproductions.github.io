@@ -23,6 +23,10 @@ const el = {
   input: document.getElementById('gameIdInput'),
   searchBtn: document.getElementById('searchBtn'),
   refreshBtn: document.getElementById('refreshBtn'),
+  converterInput: document.getElementById('converterInput'),
+  convertBtn: document.getElementById('convertBtn'),
+  convertedResult: document.getElementById('convertedResult'),
+  converterNote: document.getElementById('converterNote'),
   resolvedMode: document.getElementById('resolvedMode'),
   resolvedId: document.getElementById('resolvedId'),
   refreshInfo: document.getElementById('refreshInfo'),
@@ -53,6 +57,7 @@ function init() {
   applyTheme(state.currentTheme);
   bindEvents();
   el.input.value = CONFIG.DEFAULT_ID;
+  el.converterInput.value = '83471552202911';
   el.refreshInfo.textContent = `${Math.round(CONFIG.REFRESH_INTERVAL / 1000)}s`;
 
   loadGame(CONFIG.DEFAULT_ID, true);
@@ -65,6 +70,7 @@ function init() {
 
 function bindEvents() {
   el.themeToggle.addEventListener('click', toggleTheme);
+
   el.searchBtn.addEventListener('click', () => {
     const value = normalizeId(el.input.value);
     if (!value) {
@@ -79,8 +85,22 @@ function bindEvents() {
     loadGame(state.currentId, false);
   });
 
+  el.convertBtn.addEventListener('click', async () => {
+    const value = normalizeId(el.converterInput.value);
+    if (!value) {
+      el.convertedResult.textContent = '—';
+      el.converterNote.textContent = 'Enter a valid placeId.';
+      return;
+    }
+    await convertPlaceToUniverse(value);
+  });
+
   el.input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') el.searchBtn.click();
+  });
+
+  el.converterInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') el.convertBtn.click();
   });
 }
 
@@ -135,11 +155,14 @@ function setUpdatedNow() {
   el.lastUpdated.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
 
-function startPulse(card) {
-  card.classList.remove('changed');
+function pulseActive(card, direction, diffText) {
+  card.classList.remove('changed-up', 'changed-down', 'changed');
   void card.offsetWidth;
   card.classList.add('changed');
-  setTimeout(() => card.classList.remove('changed'), 800);
+  if (direction === 'up') card.classList.add('changed-up');
+  if (direction === 'down') card.classList.add('changed-down');
+  el.activeChange.textContent = diffText;
+  setTimeout(() => card.classList.remove('changed', 'changed-up', 'changed-down'), 800);
 }
 
 async function loadGame(inputId, manual = false) {
@@ -215,14 +238,42 @@ async function fetchUniverseDetails(universeId) {
 }
 
 async function fetchPlaceDetails(placeId) {
-  try {
-    const res = await fetch(`https://games.roproxy.com/v1/games/multiget-place-details?placeIds=${encodeURIComponent(placeId)}`, { cache: 'no-store' });
-    if (!res.ok) return null;
-    const json = await res.json();
-    return Array.isArray(json) ? json[0] : json?.data?.[0] || json?.data || json || null;
-  } catch {
-    return null;
+  const endpoints = [
+    `https://apis.roblox.com/universes/v1/places/${encodeURIComponent(placeId)}/universe`,
+    `https://games.roproxy.com/v1/games/multiget-place-details?placeIds=${encodeURIComponent(placeId)}`
+  ];
+
+  for (const url of endpoints) {
+    try {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) continue;
+      const json = await res.json();
+
+      if (json?.universeId) return { universeId: json.universeId, placeId };
+
+      const item = Array.isArray(json) ? json[0] : json?.data?.[0] || json?.data || json || null;
+      if (item) return item;
+    } catch {}
   }
+
+  return null;
+}
+
+async function convertPlaceToUniverse(placeId) {
+  el.convertedResult.textContent = '...';
+  el.converterNote.textContent = 'Resolving universeId…';
+
+  const details = await fetchPlaceDetails(placeId);
+  if (!details || !details.universeId) {
+    el.convertedResult.textContent = '—';
+    el.converterNote.textContent = 'Could not resolve this placeId.';
+    return;
+  }
+
+  el.convertedResult.textContent = String(details.universeId);
+  el.converterNote.textContent = `Resolved from placeId ${placeId}.`;
+  el.input.value = String(details.universeId);
+  await loadGame(String(details.universeId), true);
 }
 
 async function fetchLiveData(universeId) {
@@ -337,10 +388,9 @@ function renderGame(data) {
   }
 
   if (previousActive !== null && previousActive !== state.lastActive) {
-    startPulse(el.activeCard);
     const diff = state.lastActive - previousActive;
-    el.activeChange.textContent = `${diff >= 0 ? '+' : ''}${formatNumber(diff)}`;
-    el.activeChange.style.display = 'inline-flex';
+    const diffText = `${diff >= 0 ? '+' : ''}${formatNumber(diff)}`;
+    pulseActive(el.activeCard, diff >= 0 ? 'up' : 'down', diffText);
   } else if (previousVisits !== null && previousVisits !== state.lastVisits) {
     el.activeChange.textContent = 'updated';
     el.activeChange.style.display = 'inline-flex';
