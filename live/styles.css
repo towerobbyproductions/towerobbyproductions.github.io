@@ -173,7 +173,8 @@ button, input {
 .hero-copy,
 .search-card,
 .status-strip,
-.game-shell {
+.game-shell,
+.converter-card {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: 24px;
@@ -265,12 +266,6 @@ button, input {
   min-width: 92px;
 }
 
-.search-button:active,
-.action-button:active,
-.pill-button:active {
-  transform: translateY(0);
-}
-
 .search-hint {
   margin-top: 0.75rem;
   color: var(--muted);
@@ -304,6 +299,53 @@ button, input {
 .status-value {
   font-weight: 700;
   font-size: 0.95rem;
+}
+
+.converter-card {
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.converter-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.converter-head h2 {
+  font-size: 1.15rem;
+  margin-bottom: 0.2rem;
+}
+
+.converter-head p {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.converter-result {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--roblox-blue);
+  padding: 0.75rem 0.95rem;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 162, 255, 0.18);
+  background: rgba(0, 162, 255, 0.08);
+  min-width: 160px;
+  text-align: center;
+}
+
+.converter-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.converter-note {
+  margin-top: 0.75rem;
+  color: var(--muted);
+  font-size: 0.86rem;
 }
 
 .game-shell {
@@ -597,7 +639,8 @@ button, input {
   }
 
   .search-row,
-  .actions-row {
+  .actions-row,
+  .converter-row {
     flex-direction: column;
   }
 
@@ -605,6 +648,14 @@ button, input {
   .stat-grid,
   .info-grid {
     grid-template-columns: 1fr;
+  }
+
+  .converter-head {
+    flex-direction: column;
+  }
+
+  .converter-result {
+    width: 100%;
   }
 
   .title-row {
