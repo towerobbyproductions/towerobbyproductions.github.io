@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
+                            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- Главная -->
+  <url>
+    <loc>https://towerobbydev.fun/</loc>
+    <lastmod>2026-05-11T00:00:00+00:00</lastmod>
+    <priority>1.00</priority>
+  </url>
+
+  <!-- Live page -->
+  <url>
+    <loc>https://towerobbydev.fun/live/</loc>
+    <lastmod>2026-05-11T00:00:00+00:00</lastmod>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- Games -->
+  <url>
+    <loc>https://towerobbydev.fun/games/83471552202911/Keyboard-Tower-ASMR/</loc>
+    <lastmod>2026-05-04T09:00:00+00:00</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://towerobbydev.fun/games/71240146627158/HD-Admin-Chaos-Tower/</loc>
+    <lastmod>2026-03-14T10:02:00+00:00</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Community -->
+  <url>
+    <loc>https://towerobbydev.fun/communities/102552180/Tower-Obby-Productions/</loc>
+    <lastmod>2026-05-04T09:00:00+00:00</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Legal -->
+  <url>
+    <loc>https://towerobbydev.fun/privacy</loc>
+    <lastmod>2026-03-14T10:02:00+00:00</lastmod>
+    <priority>0.50</priority>
+  </url>
+
+  <url>
+    <loc>https://towerobbydev.fun/terms</loc>
+    <lastmod>2026-03-14T10:02:00+00:00</lastmod>
+    <priority>0.50</priority>
+  </url>
+
+</urlset>
