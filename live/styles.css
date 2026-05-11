@@ -228,6 +228,12 @@ button, input {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 1rem;
+}
+
+.field-block {
+  display: flex;
+  flex-direction: column;
 }
 
 .input-label {
@@ -263,11 +269,10 @@ button, input {
   color: #fff;
   padding: 0.95rem 1.15rem;
   font-weight: 700;
-  min-width: 92px;
+  min-width: 112px;
 }
 
 .search-hint {
-  margin-top: 0.75rem;
   color: var(--muted);
   font-size: 0.86rem;
 }
