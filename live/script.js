@@ -2,7 +2,8 @@ const CONFIG = {
   DEFAULT_PLACE_ID: '83471552202911',
   DEFAULT_UNIVERSE_ID: '10108284887',
   REFRESH_INTERVAL: 25000,
-  CACHE_KEY: 'live_roblox_stats_theme'
+  CACHE_KEY: 'live_roblox_stats_theme',
+  APPS_SCRIPT_URL: 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE'
 };
 
 const state = {
@@ -21,18 +22,15 @@ const el = {
   themeToggle: document.getElementById('themeToggle'),
   themeIcon: document.getElementById('themeIcon'),
   themeLabel: document.getElementById('themeLabel'),
-
   placeIdInput: document.getElementById('placeIdInput'),
   universeIdInput: document.getElementById('universeIdInput'),
   loadPlaceBtn: document.getElementById('loadPlaceBtn'),
   loadUniverseBtn: document.getElementById('loadUniverseBtn'),
-
   refreshBtn: document.getElementById('refreshBtn'),
   converterInput: document.getElementById('converterInput'),
   convertBtn: document.getElementById('convertBtn'),
   convertedResult: document.getElementById('convertedResult'),
   converterNote: document.getElementById('converterNote'),
-
   resolvedMode: document.getElementById('resolvedMode'),
   resolvedId: document.getElementById('resolvedId'),
   refreshInfo: document.getElementById('refreshInfo'),
@@ -64,14 +62,18 @@ function init() {
   bindEvents();
 
   el.placeIdInput.value = CONFIG.DEFAULT_PLACE_ID;
-  el.universeIdInput.value = CONFIG.DEFAULT_UNIVERSE_ID;
+  el.universeIdInput.value = '';
   el.converterInput.value = CONFIG.DEFAULT_PLACE_ID;
   el.refreshInfo.textContent = `${Math.round(CONFIG.REFRESH_INTERVAL / 1000)}s`;
 
-  loadGame(CONFIG.DEFAULT_PLACE_ID, true, 'placeId');
+  if (!isAppsScriptConfigured()) {
+    setMessage('Paste your Google Apps Script Web App URL in script.js first.', true);
+  } else {
+    loadGame(CONFIG.DEFAULT_PLACE_ID, true, 'placeId');
+  }
 
   state.timer = setInterval(() => {
-    if (!state.isLoading && state.currentId) {
+    if (!state.isLoading && state.currentId && isAppsScriptConfigured()) {
       loadGame(state.currentId, false, state.mode);
     }
   }, CONFIG.REFRESH_INTERVAL);
@@ -99,7 +101,7 @@ function bindEvents() {
   });
 
   el.refreshBtn.addEventListener('click', () => {
-    if (!state.currentId) return;
+    if (!state.currentId || !isAppsScriptConfigured()) return;
     loadGame(state.currentId, false, state.mode);
   });
 
@@ -124,6 +126,12 @@ function bindEvents() {
   el.converterInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') el.convertBtn.click();
   });
+}
+
+function isAppsScriptConfigured() {
+  return typeof CONFIG.APPS_SCRIPT_URL === 'string' &&
+    CONFIG.APPS_SCRIPT_URL.includes('script.google.com/macros/s/') &&
+    !CONFIG.APPS_SCRIPT_URL.includes('PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE');
 }
 
 function toggleTheme() {
@@ -165,12 +173,15 @@ function setLoading(isLoading) {
   el.loadPlaceBtn.disabled = isLoading;
   el.loadUniverseBtn.disabled = isLoading;
   el.refreshBtn.disabled = isLoading;
+  el.convertBtn.disabled = isLoading;
 
   el.placeIdInput.disabled = isLoading;
   el.universeIdInput.disabled = isLoading;
+  el.converterInput.disabled = isLoading;
 
-  el.loadPlaceBtn.textContent = isLoading ? '...' : 'Load';
-  el.loadUniverseBtn.textContent = isLoading ? '...' : 'Load';
+  el.loadPlaceBtn.textContent = isLoading ? '...' : 'Load place';
+  el.loadUniverseBtn.textContent = isLoading ? '...' : 'Load universe';
+  el.convertBtn.textContent = isLoading ? '...' : 'Convert';
 }
 
 function setMessage(text, error = false) {
@@ -180,11 +191,7 @@ function setMessage(text, error = false) {
 
 function setUpdatedNow() {
   const now = new Date();
-  el.lastUpdated.textContent = now.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  });
+  el.lastUpdated.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
 
 function pulseActive(card, direction, diffText) {
@@ -195,6 +202,61 @@ function pulseActive(card, direction, diffText) {
   if (direction === 'down') card.classList.add('changed-down');
   el.activeChange.textContent = diffText;
   setTimeout(() => card.classList.remove('changed', 'changed-up', 'changed-down'), 800);
+}
+
+function buildAppsScriptUrl(action, id) {
+  const url = CONFIG.APPS_SCRIPT_URL.trim();
+  const separator = url.includes('?') ? '&' : '?';
+  const callback = `cb_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+  return {
+    callback,
+    src: `${url}${separator}${new URLSearchParams({
+      action,
+      id: String(id),
+      callback
+    }).toString()}`
+  };
+}
+
+function jsonpRequest(action, id) {
+  return new Promise((resolve, reject) => {
+    if (!isAppsScriptConfigured()) {
+      reject(new Error('Apps Script URL is not configured'));
+      return;
+    }
+
+    const { callback, src } = buildAppsScriptUrl(action, id);
+    const script = document.createElement('script');
+    let finished = false;
+
+    const cleanup = () => {
+      if (script.parentNode) script.parentNode.removeChild(script);
+      try { delete window[callback]; } catch { window[callback] = undefined; }
+    };
+
+    const done = (value, isError = false) => {
+      if (finished) return;
+      finished = true;
+      cleanup();
+      if (isError) reject(value);
+      else resolve(value);
+    };
+
+    window[callback] = (data) => done(data, false);
+    script.onerror = () => done(new Error('Request failed'), true);
+
+    const timeout = setTimeout(() => done(new Error('Request timed out'), true), 15000);
+    const originalDone = done;
+    const safeDone = (value, isError = false) => {
+      clearTimeout(timeout);
+      originalDone(value, isError);
+    };
+    window[callback] = (data) => safeDone(data, false);
+    script.onerror = () => safeDone(new Error('Request failed'), true);
+
+    script.src = src;
+    document.body.appendChild(script);
+  });
 }
 
 async function loadGame(inputId, manual = false, forcedMode = null) {
@@ -234,28 +296,24 @@ async function loadGame(inputId, manual = false, forcedMode = null) {
 async function resolveGame(id, forcedMode = null) {
   if (forcedMode === 'universeId') {
     const universeData = await fetchUniverseDetails(id);
-    if (!universeData) return null;
-
-    return {
+    return universeData ? {
       mode: 'universeId',
       sourceId: id,
       universeId: String(universeData.universeId || universeData.id || id),
       placeId: String(universeData.rootPlaceId || universeData.placeId || id),
       basic: universeData
-    };
+    } : null;
   }
 
   if (forcedMode === 'placeId') {
     const placeData = await fetchPlaceDetails(id);
-    if (!placeData || !placeData.universeId) return null;
-
-    return {
+    return placeData ? {
       mode: 'placeId',
       sourceId: id,
-      universeId: String(placeData.universeId),
+      universeId: String(placeData.universeId || id),
       placeId: String(placeData.placeId || id),
       basic: placeData
-    };
+    } : null;
   }
 
   const universeData = await fetchUniverseDetails(id);
@@ -270,11 +328,11 @@ async function resolveGame(id, forcedMode = null) {
   }
 
   const placeData = await fetchPlaceDetails(id);
-  if (placeData && placeData.universeId) {
+  if (placeData) {
     return {
       mode: 'placeId',
       sourceId: id,
-      universeId: String(placeData.universeId),
+      universeId: String(placeData.universeId || id),
       placeId: String(placeData.placeId || id),
       basic: placeData
     };
@@ -284,78 +342,46 @@ async function resolveGame(id, forcedMode = null) {
 }
 
 async function fetchUniverseDetails(universeId) {
-  try {
-    const res = await fetch(
-      `https://games.roproxy.com/v1/games?universeIds=${encodeURIComponent(universeId)}`,
-      { cache: 'no-store' }
-    );
-    if (!res.ok) return null;
-
-    const json = await res.json();
-    const item = Array.isArray(json?.data) ? json.data[0] : json?.data?.[0] || json?.data || null;
-    return item || null;
-  } catch {
-    return null;
-  }
+  const res = await jsonpRequest('universeDetails', universeId);
+  if (!res || !res.ok) return null;
+  return res.game || null;
 }
 
 async function fetchPlaceDetails(placeId) {
-  const endpoints = [
-    `https://games.roproxy.com/v1/games/multiget-place-details?placeIds=${encodeURIComponent(placeId)}`,
-    `https://apis.roblox.com/universes/v1/places/${encodeURIComponent(placeId)}/universe`
-  ];
-
-  for (const url of endpoints) {
-    try {
-      const res = await fetch(url, { cache: 'no-store' });
-      if (!res.ok) continue;
-
-      const json = await res.json();
-
-      if (json?.universeId) {
-        return {
-          universeId: String(json.universeId),
-          placeId: String(placeId)
-        };
-      }
-
-      const item = Array.isArray(json) ? json[0] : json?.data?.[0] || json?.data || json || null;
-      if (!item) continue;
-
-      const universeId =
-        item.universeId ??
-        item.UniverseId ??
-        item.universeID ??
-        item.universeID ??
-        null;
-
-      if (universeId) {
-        return {
-          universeId: String(universeId),
-          placeId: String(item.placeId || item.PlaceId || placeId)
-        };
-      }
-    } catch {}
-  }
-
-  return null;
+  const res = await jsonpRequest('resolvePlace', placeId);
+  if (!res || !res.ok) return null;
+  return {
+    universeId: String(res.universeId || ''),
+    placeId: String(res.placeId || placeId)
+  };
 }
 
 async function convertPlaceToUniverse(placeId) {
-  el.convertedResult.textContent = '...';
-  el.converterNote.textContent = 'Resolving universeId…';
-
-  const details = await fetchPlaceDetails(placeId);
-  if (!details || !details.universeId) {
+  if (!isAppsScriptConfigured()) {
     el.convertedResult.textContent = '—';
-    el.converterNote.textContent = 'Could not resolve this placeId.';
+    el.converterNote.textContent = 'Paste your Google Apps Script URL in script.js first.';
     return;
   }
 
-  el.convertedResult.textContent = String(details.universeId);
-  el.converterNote.textContent = `Resolved from placeId ${placeId}.`;
-  el.universeIdInput.value = String(details.universeId);
-  await loadGame(String(details.universeId), true, 'universeId');
+  el.convertedResult.textContent = '...';
+  el.converterNote.textContent = 'Resolving universeId…';
+
+  try {
+    const details = await fetchPlaceDetails(placeId);
+    if (!details || !details.universeId) {
+      el.convertedResult.textContent = '—';
+      el.converterNote.textContent = 'Could not resolve this placeId.';
+      return;
+    }
+
+    el.convertedResult.textContent = String(details.universeId);
+    el.converterNote.textContent = `Resolved from placeId ${placeId}.`;
+    el.universeIdInput.value = String(details.universeId);
+    await loadGame(String(details.universeId), true, 'universeId');
+  } catch (err) {
+    el.convertedResult.textContent = '—';
+    el.converterNote.textContent = 'Could not resolve this placeId.';
+  }
 }
 
 async function fetchLiveData(universeId) {
@@ -387,38 +413,15 @@ async function fetchLiveData(universeId) {
 }
 
 async function fetchVotes(universeId) {
-  const urls = [
-    `https://games.roproxy.com/v1/games/votes?universeIds=${encodeURIComponent(universeId)}`,
-    `https://games.roproxy.com/v1/games/${encodeURIComponent(universeId)}/votes`
-  ];
-
-  for (const url of urls) {
-    try {
-      const res = await fetch(url, { cache: 'no-store' });
-      if (!res.ok) continue;
-
-      const json = await res.json();
-      const item = Array.isArray(json?.data) ? json.data[0] : json?.data || json;
-      if (item) return item;
-    } catch {}
-  }
-
-  return null;
+  const res = await jsonpRequest('votes', universeId);
+  if (!res || !res.ok) return null;
+  return res.votes || null;
 }
 
 async function fetchIcon(universeId) {
-  try {
-    const res = await fetch(
-      `https://thumbnails.roproxy.com/v1/games/icons?universeIds=${encodeURIComponent(universeId)}&size=512x512&format=Png`,
-      { cache: 'no-store' }
-    );
-    if (!res.ok) return '';
-
-    const json = await res.json();
-    return json?.data?.[0]?.imageUrl || '';
-  } catch {
-    return '';
-  }
+  const res = await jsonpRequest('icon', universeId);
+  if (!res || !res.ok) return '';
+  return res.icon || '';
 }
 
 function getRating(votes, game) {
