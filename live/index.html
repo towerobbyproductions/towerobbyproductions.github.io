@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Live Roblox Game Stats</title>
-  <meta name="description" content="Live Roblox game stats viewer with universeId / placeId search, live active players, and soft refresh animations." />
+  <meta name="description" content="Live Roblox game stats viewer with Game ID to Universe ID conversion, active players, visits, votes, creator, and thumbnail." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -18,7 +19,7 @@
           <div class="logo-dot"></div>
           <div>
             <div class="logo-text">Live Roblox Stats</div>
-            <div class="logo-subtext">universeId / placeId</div>
+            <div class="logo-subtext">Game ID → Universe ID</div>
           </div>
         </div>
 
@@ -38,8 +39,8 @@
             <span class="live-badge"><span class="live-dot"></span> Live data</span>
             <h1>Track any Roblox game in real time</h1>
             <p>
-              Enter a universeId or placeId and this page will show live game data:
-              active players, visits, votes, genre, creator, and thumbnail.
+              Paste a universeId or a placeId. The page resolves the correct universe automatically,
+              then shows active players, visits, votes, creator, genre, and thumbnail.
             </p>
           </div>
 
@@ -51,7 +52,7 @@
                 class="search-input"
                 type="text"
                 inputmode="numeric"
-                placeholder="10108284887"
+                placeholder="10108284887 or 83471552202911"
                 autocomplete="off"
               />
               <button id="searchBtn" class="search-button" type="button">Load</button>
@@ -64,7 +65,7 @@
 
         <section class="status-strip">
           <div class="status-item">
-            <span class="status-label">Mode</span>
+            <span class="status-label">Input type</span>
             <span class="status-value" id="resolvedMode">universeId</span>
           </div>
           <div class="status-item">
@@ -79,6 +80,21 @@
             <span class="status-label">Last update</span>
             <span class="status-value" id="lastUpdated">—</span>
           </div>
+        </section>
+
+        <section class="converter-card">
+          <div class="converter-head">
+            <div>
+              <h2>Game ID to Universe ID</h2>
+              <p>Use this when you only have a placeId. The page resolves it through Roblox’s universe lookup.</p>
+            </div>
+            <div class="converter-result mono" id="convertedResult">—</div>
+          </div>
+          <div class="converter-row">
+            <input id="converterInput" class="search-input" type="text" inputmode="numeric" placeholder="83471552202911" />
+            <button id="convertBtn" class="search-button" type="button">Convert</button>
+          </div>
+          <div class="converter-note" id="converterNote">Enter a placeId to see the universeId.</div>
         </section>
 
         <section class="game-shell" id="gameShell">
