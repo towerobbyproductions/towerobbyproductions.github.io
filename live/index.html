@@ -78,44 +78,44 @@
             <span class="live-badge"><span class="live-dot"></span> Live data</span>
             <h1>Track any Roblox game in real time</h1>
             <p>
-              Use either a Place ID or a Universe ID. The page resolves the correct universe automatically,
+              Paste a placeId or a universeId. The page resolves the right universe automatically,
               then shows active players, visits, votes, creator, genre, and thumbnail.
             </p>
           </div>
 
           <div class="search-card">
-            <label class="input-label" for="placeIdInput">Place ID / Game ID</label>
-            <div class="search-row">
-              <input
-                id="placeIdInput"
-                class="search-input"
-                type="text"
-                inputmode="numeric"
-                placeholder="83471552202911"
-                autocomplete="off"
-              />
-              <button id="loadPlaceBtn" class="search-button" type="button">Load</button>
+            <div class="field-block">
+              <label class="input-label" for="placeIdInput">Place ID / Game ID</label>
+              <div class="search-row">
+                <input
+                  id="placeIdInput"
+                  class="search-input"
+                  type="text"
+                  inputmode="numeric"
+                  placeholder="83471552202911"
+                  autocomplete="off"
+                />
+                <button id="loadPlaceBtn" class="search-button" type="button">Load place</button>
+              </div>
             </div>
+
+            <div class="field-block">
+              <label class="input-label" for="universeIdInput">Universe ID</label>
+              <div class="search-row">
+                <input
+                  id="universeIdInput"
+                  class="search-input"
+                  type="text"
+                  inputmode="numeric"
+                  placeholder="10108284887"
+                  autocomplete="off"
+                />
+                <button id="loadUniverseBtn" class="search-button" type="button">Load universe</button>
+              </div>
+            </div>
+
             <div class="search-hint">
               Default example: <strong>83471552202911</strong>
-            </div>
-
-            <div style="height: 1rem;"></div>
-
-            <label class="input-label" for="universeIdInput">Universe ID</label>
-            <div class="search-row">
-              <input
-                id="universeIdInput"
-                class="search-input"
-                type="text"
-                inputmode="numeric"
-                placeholder="10108284887"
-                autocomplete="off"
-              />
-              <button id="loadUniverseBtn" class="search-button" type="button">Load</button>
-            </div>
-            <div class="search-hint">
-              Optional direct universe loading.
             </div>
           </div>
         </section>
@@ -143,7 +143,7 @@
           <div class="converter-head">
             <div>
               <h2>Place ID to Universe ID</h2>
-              <p>Use this when you only have a placeId. The page resolves it through Roblox lookup.</p>
+              <p>Use this when you only have a placeId. The page resolves it through Google Apps Script.</p>
             </div>
             <div class="converter-result mono" id="convertedResult">—</div>
           </div>
