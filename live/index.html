@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Live Roblox Game Stats | Tower Obby Productions</title>
-  <meta name="description" content="Live Roblox game stats viewer by Tower Obby Productions. Convert Game ID to Universe ID and track active players, visits, votes, creator, genre, and thumbnail in real time." />
+  <meta name="description" content="Live Roblox game stats viewer by Tower Obby Productions. Convert Place ID to Universe ID and track active players, visits, votes, creator, genre, and thumbnail in real time." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://towerobbydev.fun/live/" />
 
@@ -16,29 +16,26 @@
   <link rel="icon" href="/site/assets/icon/favicon32x32.ico" sizes="32x32" />
   <link rel="apple-touch-icon" href="/site/assets/icon/favicon180x180.png" />
 
-  <!-- Open Graph -->
   <meta property="og:site_name" content="Tower Obby Productions" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Live Roblox Game Stats | Tower Obby Productions" />
-  <meta property="og:description" content="Convert Game ID to Universe ID and track Roblox game stats live: players, visits, votes, creator, genre, and thumbnail." />
+  <meta property="og:description" content="Convert Place ID to Universe ID and track Roblox game stats live: players, visits, votes, creator, genre, and thumbnail." />
   <meta property="og:url" content="https://towerobbydev.fun/live/" />
   <meta property="og:image" content="https://towerobbydev.fun/site/assets/icon/favicon64x64.ico" />
   <meta property="og:image:width" content="64" />
   <meta property="og:image:height" content="64" />
 
-  <!-- Twitter / X -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Live Roblox Game Stats | Tower Obby Productions" />
-  <meta name="twitter:description" content="Convert Game ID to Universe ID and track Roblox game stats live." />
+  <meta name="twitter:description" content="Convert Place ID to Universe ID and track Roblox game stats live." />
   <meta name="twitter:image" content="https://towerobbydev.fun/site/assets/icon/favicon64x64.ico" />
 
-  <!-- Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
     "name": "Live Roblox Game Stats",
-    "description": "Live Roblox game stats viewer with Game ID to Universe ID conversion, active players, visits, votes, creator, genre, and thumbnail.",
+    "description": "Live Roblox game stats viewer with Place ID to Universe ID conversion, active players, visits, votes, creator, genre, and thumbnail.",
     "url": "https://towerobbydev.fun/live/",
     "isPartOf": {
       "@type": "WebSite",
@@ -61,7 +58,7 @@
           <div class="logo-dot"></div>
           <div>
             <div class="logo-text">Live Roblox Stats</div>
-            <div class="logo-subtext">Game ID → Universe ID</div>
+            <div class="logo-subtext">Place ID → Universe ID</div>
           </div>
         </div>
 
@@ -81,26 +78,44 @@
             <span class="live-badge"><span class="live-dot"></span> Live data</span>
             <h1>Track any Roblox game in real time</h1>
             <p>
-              Paste a universeId or a placeId. The page resolves the correct universe automatically,
+              Use either a Place ID or a Universe ID. The page resolves the correct universe automatically,
               then shows active players, visits, votes, creator, genre, and thumbnail.
             </p>
           </div>
 
           <div class="search-card">
-            <label class="input-label" for="gameIdInput">Game ID</label>
+            <label class="input-label" for="placeIdInput">Place ID / Game ID</label>
             <div class="search-row">
               <input
-                id="gameIdInput"
+                id="placeIdInput"
                 class="search-input"
                 type="text"
                 inputmode="numeric"
-                placeholder="10108284887 or 83471552202911"
+                placeholder="83471552202911"
                 autocomplete="off"
               />
-              <button id="searchBtn" class="search-button" type="button">Load</button>
+              <button id="loadPlaceBtn" class="search-button" type="button">Load</button>
             </div>
             <div class="search-hint">
-              Default example: <strong>10108284887</strong>
+              Default example: <strong>83471552202911</strong>
+            </div>
+
+            <div style="height: 1rem;"></div>
+
+            <label class="input-label" for="universeIdInput">Universe ID</label>
+            <div class="search-row">
+              <input
+                id="universeIdInput"
+                class="search-input"
+                type="text"
+                inputmode="numeric"
+                placeholder="10108284887"
+                autocomplete="off"
+              />
+              <button id="loadUniverseBtn" class="search-button" type="button">Load</button>
+            </div>
+            <div class="search-hint">
+              Optional direct universe loading.
             </div>
           </div>
         </section>
@@ -108,11 +123,11 @@
         <section class="status-strip">
           <div class="status-item">
             <span class="status-label">Input type</span>
-            <span class="status-value" id="resolvedMode">universeId</span>
+            <span class="status-value" id="resolvedMode">placeId</span>
           </div>
           <div class="status-item">
             <span class="status-label">Current ID</span>
-            <span class="status-value mono" id="resolvedId">10108284887</span>
+            <span class="status-value mono" id="resolvedId">83471552202911</span>
           </div>
           <div class="status-item">
             <span class="status-label">Auto refresh</span>
@@ -127,8 +142,8 @@
         <section class="converter-card">
           <div class="converter-head">
             <div>
-              <h2>Game ID to Universe ID</h2>
-              <p>Use this when you only have a placeId. The page resolves it through Roblox’s universe lookup.</p>
+              <h2>Place ID to Universe ID</h2>
+              <p>Use this when you only have a placeId. The page resolves it through Roblox lookup.</p>
             </div>
             <div class="converter-result mono" id="convertedResult">—</div>
           </div>
