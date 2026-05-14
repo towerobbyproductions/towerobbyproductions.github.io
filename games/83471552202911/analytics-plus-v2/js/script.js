@@ -1,5 +1,5 @@
 // js/script.js — client-side (uses GAS proxy endpoints)
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbxV67MTc8X8ITRZVchLZoVA8iVMXjW_oqVWJgZv2uurXx_WUTbkG-RpJQkSspDu10qy/exec'; // <- вставьте сюда Web app URL
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzrKB5V-ymYKZs2KRWLxt0aW4MA2ML5NI2AuGIO12iYCjdujCL84ilXz2VaTQw2SQBs/exec'; // <- вставьте сюда Web app URL
 const API_TOKEN = 's3cr3t-K9X'; // <- должен совпадать с API_TOKEN в Script Properties
 
 const GAME_CONFIG = {
