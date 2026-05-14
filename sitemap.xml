@@ -51,4 +51,17 @@
     <priority>0.50</priority>
   </url>
 
+  <!-- New Analytics Plus V2 pages -->
+  <url>
+    <loc>https://towerobbydev.fun/games/71240146627158/analytics-plus-v2/</loc>
+    <lastmod>2026-05-14T00:00:00+00:00</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://towerobbydev.fun/games/83471552202911/analytics-plus-v2/</loc>
+    <lastmod>2026-05-14T00:00:00+00:00</lastmod>
+    <priority>0.80</priority>
+  </url>
+
 </urlset>
