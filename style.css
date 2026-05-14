@@ -93,6 +93,9 @@
   background: rgba(0, 162, 255, 0.14);
 }
 
+.footer-details[open] .footer-summary {
+  margin-bottom: 0.85rem;
+}
 
 html.light {
   --bg: var(--bg-light);
