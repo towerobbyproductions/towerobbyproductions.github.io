@@ -18,6 +18,32 @@
   --border-color: rgba(255, 255, 255, 0.08);
 }
 
+.footer-links {
+    margin-top: 16px;
+}
+
+.footer-details {
+    margin-top: 8px;
+}
+
+.footer-summary {
+    cursor: pointer;
+    font-weight: 600;
+    list-style: none;
+}
+
+.footer-links-grid {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+}
+
+.footer-links-grid a {
+    text-decoration: none;
+}
+
+
 html.light {
   --bg: var(--bg-light);
   --text: var(--text-light);
