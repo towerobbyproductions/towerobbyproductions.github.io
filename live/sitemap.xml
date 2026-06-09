@@ -7,7 +7,7 @@
   <!-- Главная -->
   <url>
     <loc>https://towerobbydev.fun/</loc>
-    <lastmod>2026-05-11T00:00:00+00:00</lastmod>
+    <lastmod>2026-06-09T00:00:00+00:00</lastmod>
     <priority>1.00</priority>
   </url>
 
@@ -21,7 +21,13 @@
   <!-- Games -->
   <url>
     <loc>https://towerobbydev.fun/games/83471552202911/Keyboard-Tower-ASMR/</loc>
-    <lastmod>2026-05-04T09:00:00+00:00</lastmod>
+    <lastmod>2026-06-09T00:00:00+00:00</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://towerobbydev.fun/games/83471552202911/Pure-Keyboard-Tower-ASMR/</loc>
+    <lastmod>2026-06-09T00:00:00+00:00</lastmod>
     <priority>0.80</priority>
   </url>
 
@@ -49,6 +55,19 @@
     <loc>https://towerobbydev.fun/terms</loc>
     <lastmod>2026-03-14T10:02:00+00:00</lastmod>
     <priority>0.50</priority>
+  </url>
+
+  <!-- Analytics Plus V2 pages -->
+  <url>
+    <loc>https://towerobbydev.fun/games/71240146627158/analytics-plus-v2/</loc>
+    <lastmod>2026-05-14T00:00:00+00:00</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://towerobbydev.fun/games/83471552202911/analytics-plus-v2/</loc>
+    <lastmod>2026-06-09T00:00:00+00:00</lastmod>
+    <priority>0.80</priority>
   </url>
 
 </urlset>
